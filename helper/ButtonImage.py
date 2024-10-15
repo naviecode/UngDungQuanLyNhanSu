@@ -38,3 +38,7 @@ class ButtonImage:
 
     def place(self, **kwargs):
         self.frame.place(**kwargs)
+    
+    def destroy(self):
+        self.button.destroy()
+        self.frame.destroy()

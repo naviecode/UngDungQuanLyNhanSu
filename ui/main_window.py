@@ -4,13 +4,14 @@ from ui.navbar_ui import Navbar
 from ui.content_ui import Content
 from ui.pages.Overview import Overview
 from ui.pages.BasePage import BasePage
+from tkinter import ttk
 
 
-class main_window(tk.Frame):
-    def __init__(self, parent):
-        super().__init__(parent)
+class main_window(tk.Tk):
+    def __init__(self):
+        super().__init__()
+        self.geometry("1600x600")
 
-        self.base_frames = BasePage(self)
         self.frames = {}
         #header
         header = Header(self)
@@ -21,11 +22,13 @@ class main_window(tk.Frame):
         navbar.pack(side="left", fill="y")
 
         #content
-        content = Content(self)
+        content = tk.Frame(self)
         content.pack(fill="x")
         content.grid_rowconfigure(0, weight=1)
         content.grid_columnconfigure(0, weight=1)
-        navbar.initNav(content)
+        navbar.initNav(content, self)
 
+        #Chọn trang đầu
         navbar.show_page(Overview)
+
 

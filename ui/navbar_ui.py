@@ -113,8 +113,8 @@ class Navbar(tk.Frame):
         frame = self.frames[page]
         frame.tkraise()
 
-    def initNav(self, content):
+    def initNav(self, content, parent):
         for F in (Overview, Employee, License, Permission, Timekeeping, Timesheet, Department):
-            frame = F(content, self)
+            frame = F(content, parent)
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky="nsew")
