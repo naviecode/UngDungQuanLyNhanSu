@@ -3,9 +3,10 @@ import configparser
 from data.init_data import InitData
 from helper.ButtonImage import ButtonImage
 
+
 class BasePage(tk.Frame):
     def __init__(self, parent):
-        super().__init__(parent)
+        super().__init__(parent)       
 
         #Connect database and create table
         config = configparser.ConfigParser()
@@ -19,14 +20,14 @@ class BasePage(tk.Frame):
         nav_base.pack(padx=10,fill="x",expand=True)
         nav_base.pack_propagate(False)
 
-        self.button_add = ButtonImage(nav_base, "./images/icons/add.png", "Thêm mới", self.show_popup,width=150, height=30, bg="#0178bc", fg="white")
+        self.button_add = ButtonImage(nav_base, "./images/icons/add.png", "Thêm mới", self.add,width=150, height=30, bg="#0178bc", fg="white")
         self.button_add.pack(side="right")
 
     def add(self):
         print("Thêm mới")
-    def edit(self):
-        print("Chỉnh sửa")
-    def delete(self):
-        print("Xóa")
-    def show_popup(self):
-        print("Open popup")
+    def export_excel(self):
+        print("export")
+
+
+
+
