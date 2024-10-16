@@ -15,7 +15,7 @@ class employee_model:
         self.password = password
     
     def __str__(self):
-        return f"Employee({self.employee_id}, {self.name}, {self.position}, {self.department})"
+        return f"Employee({self.employee_id}, {self.name}, {self.position_id}, {self.department_id})"
     
     def get_full_info(self):
         return {
@@ -26,8 +26,8 @@ class employee_model:
             "Address": self.address,
             "Phone Number": self.phone_number,
             "Email": self.email,
-            "Position": self.position,
-            "Department": self.department,
+            "Position": self.position_id,
+            "Department": self.department_id,
             "Start Date": self.start_date,
             "ID Card Number": self.id_card_number,
             "Notes": self.notes

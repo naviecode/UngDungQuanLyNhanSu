@@ -3,27 +3,68 @@ from tkinter import ttk
 from ui.pages.BasePage import BasePage
 from service.employee_service import EmployeeService
 from models.employee.employee_model import employee_model
-from helper.ButtonImage import ButtonImage
 from tkcalendar import DateEntry
 from datetime import datetime
+from tkinter import messagebox
+from helper.CustomTreeView import CustomTreeView
 
 class Employee(BasePage):
     def __init__(self, parent, controller):
         super().__init__(parent)
         label = tk.Label(self, text="QUẢN LÝ NHÂN SỰ", font=("Helvetica", 16))
         label.pack(pady=20, side="top", fill="x", expand=True)
+        colums = [
+            {
+                'key': 'ID',
+                'name': 'ID',
+                'width': 10,
+                'anchor': 'center'
+            },
+            {
+                'key': 'Name',
+                'name': 'Họ tên',
+                'width': 150,
+                'anchor': 'center'
+            },
+            {
+                'key': 'Address',
+                'name': 'Địa chỉ',
+                'width': 150,
+                'anchor': 'center'
+            },
+            {
+                'key': 'Gender',
+                'name': 'Giới tính',
+                'width': 20,
+                'anchor': 'center'
+            },
+            {
+                'key': 'Position',
+                'name': 'Chức vụ',
+                'width': 80,
+                'anchor': 'center'
+            },
+            {
+                'key': 'Department',
+                'name': 'Phòng ban',
+                'width': 80,
+                'anchor': 'center'
+            },
+            {
+                'key': 'Action',
+                'name': 'Hành động',
+                'width': 100,
+                'anchor': 'center'
+            }
+        ]
+        
 
-        # Số mục trên mỗi trang
-        self.items_per_page = 2
-        self.current_page = 0
-
-        self.employee_service = EmployeeService(self.db)
+        #Get view
+        self.frame_view = tk.Frame(self)
+        self.frame_view.pack(padx=10, fill="both", expand=True)
+        self.employee_service = EmployeeService()
         self.datas = self.employee_service.search()
-        self.buttons = []
-        self.get_treeView(datas=self.datas)
-
-        #Load trang đầu
-        self.loadData()
+        self.treeView = CustomTreeView(self.frame_view, self, self.datas, colums)
 
     def search(self):
         return ""
@@ -39,127 +80,25 @@ class Employee(BasePage):
         form_popup = EmployeeFormPopup(self, data)
 
     def insert(self, data):
-        result = self.employee_service.insert(data)
-        self.loadData()
+        confirm = messagebox.askyesno("Xác nhận thêm mới", "Bạn có chắc chắn muốn thêm mới ?")
+        if confirm:
+            print(data)
+            result = self.employee_service.insert(data)
+            self.treeView.loadData()
+
     
     def update(self, data):
-        print(data.employee_id)
-        result = self.employee_service.update(data)
-        self.loadData()
+        confirm = messagebox.askyesno("Xác nhận cập nhập", "Bạn có chắc chắn muốn cập nhập ?")
+        if confirm:
+            result = self.employee_service.update(data)
+            self.treeView.loadData()
     
     def delete(self, row_id):
         row_id = row_id + 1
-        result = self.employee_service.delete(row_id)
-        self.loadData()
-    
-    def loadData(self):
-        for child in self.frame_view.tree.get_children():
-            self.frame_view.tree.delete(child)
-
-        for button in self.buttons:
-            button.destroy()
-        self.buttons.clear()
-        
-        self.data_reload = self.employee_service.search()
-
-        # Lấy dữ liệu cho trang hiện tại
-        start = self.current_page * self.items_per_page
-        end = start + self.items_per_page
-        page_data = self.data_reload[start:end]
-
-        for employee in page_data:
-            self.frame_view.tree.insert('', tk.END, values=employee)
-        
-        self.after(100, self.get_button_view)
-
-        # Cập nhật trạng thái nút
-        self.prev_button.config(state=tk.NORMAL if self.current_page > 0 else tk.DISABLED)
-        self.next_button.config(state=tk.NORMAL if end < len(self.data_reload) else tk.DISABLED)
-
-        
-
-
-    def get_treeView(self, datas):
-        self.frame_view = tk.Frame(self)
-        self.frame_view.pack(padx=10, fill="both", expand=True)
-
-        self.frame_view.tree = ttk.Treeview(self.frame_view, columns=('ID', 'Name', 'Address','Gender','Position','Department','Action'), show='headings')
-        self.frame_view.tree.heading('ID', text='ID')
-        self.frame_view.tree.heading('Name', text='Họ tên')
-        self.frame_view.tree.heading('Address', text='Địa chỉ')
-        self.frame_view.tree.heading('Gender', text='Giới tính')
-        self.frame_view.tree.heading('Position', text='Chức vụ')
-        self.frame_view.tree.heading('Department', text='Phòng ban')
-        self.frame_view.tree.heading('Action', text='Hành động')
-
-        # Kích thước cho các cột
-        self.frame_view.tree.column('ID', width=10, anchor="center")
-        self.frame_view.tree.column('Name', width=150)
-        self.frame_view.tree.column('Address', width=150)
-        self.frame_view.tree.column('Gender', width=20, anchor="center")
-        self.frame_view.tree.column('Position', width=80)
-        self.frame_view.tree.column('Department', width=80)
-        self.frame_view.tree.column('Action', width=100, anchor="e")
-
-        self.frame_view.tree.grid(row=0, column=0, sticky='nsew')
-
-        style = ttk.Style()
-        style.configure("Treeview", rowheight=30)
-
-        # Thêm thanh cuộn
-        scrollbar_y = ttk.Scrollbar(self.frame_view, orient=tk.VERTICAL, command=self.frame_view.tree.yview)
-        self.frame_view.tree.configure(yscroll=scrollbar_y.set)
-        scrollbar_y.grid(row=0, column=1, sticky='ns')
-
-        scrollbar_x = ttk.Scrollbar(self.frame_view, orient=tk.HORIZONTAL, command=self.frame_view.tree.xview)
-        self.frame_view.tree.configure(xscroll=scrollbar_x.set)
-        scrollbar_x.grid(row=1, column=0, sticky='ew')
-
-        # Tùy chỉnh việc mở rộng
-        self.frame_view.grid_rowconfigure(0, weight=1)
-        self.frame_view.grid_columnconfigure(0, weight=1)
-
-        for employee in datas:
-            self.frame_view.tree.insert('', tk.END, values=employee)
-        
-        self.after(100, self.get_button_view)
-
-        # Tạo nút trước và tiếp theo
-        self.button_frame = tk.Frame(self)
-        self.button_frame.pack(fill="both", expand=True, pady=10)
-
-        self.next_button = tk.Button(self.button_frame, text="Tiếp theo", command=self.next_page, width=10)
-        self.next_button.pack(padx=10, side="right")
-
-        self.prev_button = tk.Button(self.button_frame, text="Trước", command=self.prev_page, width=10)
-        self.prev_button.pack(padx=20, side="right")
-
-
-    def get_button_view(self):
-        # Tạo button trong Treeview
-        for child in self.frame_view.tree.get_children():
-            row_id = self.frame_view.tree.index(child)
-            x0, y0, width, height = self.frame_view.tree.bbox(child, column=6)  
-            button_delete = ButtonImage(self.frame_view.tree, "./images/icons/delete.png", "", command=lambda id=row_id: self.delete(id),width=50, height=30, bg="white", fg="white")
-            button_update = ButtonImage(self.frame_view.tree, "./images/icons/edit.png", "", command=lambda id=row_id: self.edit(id),width=50, height=30, bg="white", fg="white")
-            
-            button_update.place(x=x0 + width - 30, y=y0 + 2, width=30, height=20)
-            button_delete.place(x=x0 + width - 30 - 30, y=y0 + 2, width=30, height=20)
-
-            self.buttons.append(button_update)
-            self.buttons.append(button_delete)
-
-
-
-    def next_page(self):
-        if (self.current_page + 1) * self.items_per_page < len(self.datas):
-            self.current_page += 1
-            self.loadData()
-
-    def prev_page(self):
-        if self.current_page > 0:
-            self.current_page -= 1
-            self.loadData()
+        confirm = messagebox.askyesno("Xác nhận xóa", "Bạn có chắc chắn muốn xóa nhân viên này?")
+        if confirm:
+            result = self.employee_service.delete(row_id)
+            self.treeView.loadData()
 
     
 class EmployeeFormPopup(tk.Toplevel):
@@ -168,7 +107,7 @@ class EmployeeFormPopup(tk.Toplevel):
         self.geometry("680x20")
         self.title(parent.title_popup)
         self.parent = parent
-
+        
         window_width = 680
         window_height = 280
         screen_width = parent.winfo_screenwidth()
@@ -244,19 +183,16 @@ class EmployeeFormPopup(tk.Toplevel):
 
         # Nếu edit insert data và điều chỉnh readonly
         if(data is not None):
-            convert_birth_day = datetime.strptime(data[2], '%Y-%m-%d').date()
-            convert_start_date = datetime.strptime(data[9], '%Y-%m-%d').date()
-
             self.entry_id.insert(0, data[0])
             self.entry_name.insert(0, data[1])
-            self.birth_day.set_date(convert_birth_day)
+            self.birth_day.set_date(data[2])
             self.gender_combobox.set("Nam")
             self.entry_address.insert(0, data[4])
             self.entry_phone_number.insert(0, data[5])
             self.entry_email.insert(0, data[6])
             self.position_combobox.set("Nhân viên")
             self.department_combobox.set("IT")
-            self.start_date.set_date(convert_start_date)
+            self.start_date.set_date(data[9])
             self.entry_id_card_number.insert(0, data[10])
 
 
@@ -275,17 +211,18 @@ class EmployeeFormPopup(tk.Toplevel):
         employee_input = employee_model(
             employee_id= employee_id,
             name = self.entry_name.get(),
-            date_of_birth = self.birth_day.get_date(),
+            date_of_birth = self.birth_day.get_date().strftime('%Y-%m-%d'),
             gender = gender_value,
             address = self.entry_address.get(),
             phone_number = self.entry_phone_number.get(),
             email = self.entry_email.get(),
             position_id = position,
             department_id = department,
-            start_date = self.start_date.get_date(),
+            start_date = self.start_date.get_date().strftime('%Y-%m-%d'),
             id_card_number = self.entry_id_card_number.get(),
             password='1'
         )
+
 
         
         if employee_input.employee_id is None or employee_input.employee_id == "":
