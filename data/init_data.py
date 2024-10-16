@@ -1,16 +1,24 @@
-import sqlite3
-
+import mysql.connector
+from mysql.connector import Error
 class InitData:
     def __init__(self, config):
+        self.host = config['database']['host']
+        self.user = config['database']['user']
+        self.password = config['database']['password']
         self.database = config['database']['database']
         self.connection = None
 
     def connect_database(self):
-        """Kết nối đến cơ sở dữ liệu MySQL."""
         try:
-            self.connection = sqlite3.connect(self.database)
-            print("Kết nối thành công đến cơ sở dữ liệu.")
-        except sqlite3.Error as e:
+            self.connection = mysql.connector.connect(
+                host=self.host,
+                user=self.user,
+                password=self.password,
+                database=self.database
+            )
+            if self.connection.is_connected():
+                print("Kết nối thành công đến cơ sở dữ liệu.")
+        except Error  as e:
             print(f"Error while connecting to MySQL: {e}")
     
     def create_table(self):
@@ -19,29 +27,30 @@ class InitData:
             cursor = self.connection.cursor()
             create_table_employee_query = """
             CREATE TABLE IF NOT EXISTS employees (
-                employee_id INTEGER PRIMARY KEY AUTOINCREMENT, 
-                name VARCHAR(100) NOT NULL,
+                employee_id INT PRIMARY KEY AUTO_INCREMENT, 
+                name NVARCHAR(100) NOT NULL,
                 date_of_birth DATE,
-                gender INTEGER CHECK (gender IN(0, 1)),
-                address VARCHAR(100),
+                gender TINYINT CHECK (gender IN(0, 1)),
+                address NVARCHAR(100),
                 phone_number VARCHAR(50) NOT NULL,
                 email VARCHAR(50) NOT NULL,
-                position_id INTEGER NOT NULL,
-                department_id INTEGER NOT NULL,
+                position_id INT NOT NULL,
+                department_id INT NOT NULL,
                 start_date DATE NOT NULL,
                 id_card_number VARCHAR(50) NOT NULL,
                 password VARCHAR(50)
             );
             """
+
             cursor.execute(create_table_employee_query)
             self.connection.commit()
             print("Bảng employees đã được tạo thành công.")
-        except sqlite3.Error as e:
+        except Error as e:
             print(f"Error while creating table: {e}")
         finally:
             cursor.close()
 
     def close_connection(self):
-        """Đóng kết nối đến cơ sở dữ liệu."""
-        self.connection.close()
-        print("Kết nối đến cơ sở dữ liệu đã được đóng.")
+        if self.connection.is_connected():
+            self.connection.close()
+            print("Kết nối đến cơ sở dữ liệu đã được đóng.")
