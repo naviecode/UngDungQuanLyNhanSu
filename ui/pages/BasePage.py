@@ -20,6 +20,8 @@ class BasePage(tk.Frame):
 
     def add(self):
         print("Thêm mới")
+    def search(self):
+        print("Tìm theo filter")
     def export_excel(self):
         print("export")
 

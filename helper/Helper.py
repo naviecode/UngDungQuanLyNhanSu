@@ -1,2 +1,0 @@
-from ButtonImage import ButtonImage
-from CustomTreeView import CustomTreeView

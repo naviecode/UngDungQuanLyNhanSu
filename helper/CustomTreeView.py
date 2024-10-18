@@ -4,21 +4,22 @@ from helper.ButtonImage import ButtonImage
 
 
 class CustomTreeView:
-    def __init__(self, frame_view, parent, datas, columns):
+    def __init__(self, frame_view, parent, datas, columns, columnShowBtn):
         """ 
             datas: dữ liệu theo thứ tự cột
             objcet: coulumn - column name - width - anchor
+            columnShowBtn: vị trí hiển thị button trên treeView
         """
         self.frame_view = frame_view
         self.parent = parent
         self.datas = datas
         self.columns = columns
+        self.columnShowBtn = columnShowBtn
 
         # Số mục trên mỗi trang
-        self.items_per_page = 5
+        self.items_per_page = 9
         self.current_page = 0
         self.buttons = []
-
         self.get_treeView()
 
         #Load trang đầu
@@ -29,7 +30,7 @@ class CustomTreeView:
         for column in self.columns:
             columnsView.append(column['key'])
         
-        self.frame_view.tree = ttk.Treeview(self.frame_view, columns=columnsView , show='headings')
+        self.frame_view.tree = ttk.Treeview(self.frame_view, columns=columnsView , show='headings',height=10)
         
         for col in self.columns:
             self.frame_view.tree.heading(col['key'], text=col['name'])
@@ -53,10 +54,10 @@ class CustomTreeView:
         self.frame_view.grid_rowconfigure(0, weight=1)
         self.frame_view.grid_columnconfigure(0, weight=1)
 
-        for employee in self.datas:
-            self.frame_view.tree.insert('', tk.END, values=employee)
+        for data in self.datas:
+            self.frame_view.tree.insert('', tk.END, values=data)
         
-        self.parent.after(100, self.get_button_view)
+        self.parent.after(500, self.get_button_view)
 
         # Tạo nút trước và tiếp theo
         self.button_frame = tk.Frame(self.parent)
@@ -72,8 +73,9 @@ class CustomTreeView:
     def get_button_view(self):
         # Tạo button trong Treeview
         for child in self.frame_view.tree.get_children():
-            row_id = self.frame_view.tree.index(child)
-            x0, y0, width, height = self.frame_view.tree.bbox(child, column=6)  
+            id_index = self.parent.search()
+            row_id = id_index[self.frame_view.tree.index(child)][0]
+            x0, y0, width, height = self.frame_view.tree.bbox(child, column=self.columnShowBtn)  
             button_delete = ButtonImage(self.frame_view.tree, "./images/icons/delete.png", "", command=lambda id=row_id: self.parent.delete(id),width=50, height=30, bg="white", fg="white")
             button_update = ButtonImage(self.frame_view.tree, "./images/icons/edit.png", "", command=lambda id=row_id: self.parent.edit(id),width=50, height=30, bg="white", fg="white")
             
@@ -101,17 +103,17 @@ class CustomTreeView:
             button.destroy()
         self.buttons.clear()
         
-        self.data_reload = self.parent.employee_service.search()
+        self.data_reload = self.parent.search()
 
         # Lấy dữ liệu cho trang hiện tại
         start = self.current_page * self.items_per_page
         end = start + self.items_per_page
         page_data = self.data_reload[start:end]
 
-        for employee in page_data:
-            self.frame_view.tree.insert('', tk.END, values=employee)
+        for data in page_data:
+            self.frame_view.tree.insert('', tk.END, values=data)
         
-        self.parent.after(100, self.get_button_view)
+        self.parent.after(500, self.get_button_view)
 
         # Cập nhật trạng thái nút
         self.prev_button.config(state=tk.NORMAL if self.current_page > 0 else tk.DISABLED)
