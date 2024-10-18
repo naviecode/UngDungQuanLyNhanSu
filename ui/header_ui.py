@@ -4,6 +4,7 @@ from tkinter import messagebox
 
 class Header(tk.Frame):
     def __init__(self, parent, main_app):
+
         super().__init__(parent)
         self.main_app = main_app
         header = tk.Frame(self, bg="#0178bc", height=40)
