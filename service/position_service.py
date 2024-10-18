@@ -10,6 +10,7 @@ class PositionService:
     def insert(self, input):
         self.db.connect_database()
         cursor = self.db.connection.cursor()
+        
         self.db.connection.cursor().execute(f'''
         INSERT INTO positions (
             position_name, 
@@ -19,10 +20,10 @@ class PositionService:
         )
         VALUES 
         (
-            '{input.position_name}', 
-            '{input.description}',
-            {input.department_id},
-            '{input.create_date}'
+            '{input["position_name"]}', 
+            '{input["description"]}',
+            {input["department_id"]},
+            CURDATE()
         )
         ''')
 
@@ -36,7 +37,7 @@ class PositionService:
         cursor = self.db.connection.cursor()
         
         cursor.execute('''
-            SELECT A.position_id, A.position_name, A.description, A.create_date, B.department_name   
+            SELECT A.position_id, A.position_name, A.description, DATE_FORMAT( A.create_date, '%d/%m/%Y') as create_date, B.department_name   
             FROM positions A
             LEFT JOIN departments B ON A.department_id = B.department_id
         ''')
@@ -52,10 +53,10 @@ class PositionService:
         cursor = self.db.connection.cursor()
         self.db.connection.cursor().execute(f'''
         UPDATE positions 
-        SET position_name = N'{data.position_name}', 
-        description = N'{data.description}', 
-        department_id = {data.department_id}
-        WHERE position_id = {data.position_id}
+        SET position_name = N'{data["position_name"]}', 
+        description = N'{data["description"]}', 
+        department_id = {data["department_id"]}
+        WHERE position_id = {data["position_id"]}
         ''')
         self.db.connection.commit()
 
@@ -74,15 +75,14 @@ class PositionService:
     def getById(self, id):
         self.db.connect_database()
         cursor = self.db.connection.cursor()
-        print(id)
         cursor.execute(f'SELECT position_id, position_name, description, department_id FROM positions WHERE position_id = {id}')
-
+        columns_name = [desc[0] for desc in cursor.description]
         row = cursor.fetchone()
 
         cursor.close()
         self.db.close_connection()
-
-        return row
+        row_dict = dict(zip(columns_name, row))
+        return row_dict
     def getCombobox(self):
         self.db.connect_database()
         cursor = self.db.connection.cursor()

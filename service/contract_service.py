@@ -73,7 +73,6 @@ class ContractService:
     def getById(self, id):
         self.db.connect_database()
         cursor = self.db.connection.cursor()
-        print(id)
         cursor.execute(f'SELECT * FROM contracts WHERE contract_id = {id}')
 
         row = cursor.fetchone()

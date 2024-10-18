@@ -22,23 +22,21 @@ class EmployeeService:
             start_date,
             id_card_number,
             password,
-            username,
-            end_date                     
+            username
         )
         VALUES 
         (
-            N'{input.name}', 
-            '{input.date_of_birth}',
-            {input.gender},
-            N'{input.address}',
-            '{input.phone_number}',
-            '{input.email}',
-            {input.position_id},
-            '{input.start_date}',
-            '{input.id_card_number}',
+            N'{input["name"]}', 
+            '{input["date_of_birth"]}',
+            {input["gender"]},
+            N'{input["address"]}',
+            '{input["phone_number"]}',
+            '{input["email"]}',
+            {input["position_id"]},
+            '{input["start_date"]}',
+            '{input["id_card_number"]}',
             {'"1"'},
-            '{input.username}',
-            '{input.end_date}'
+            '{input["username"]}'
         )
         ''')
 
@@ -59,11 +57,7 @@ class EmployeeService:
                 ELSE 'Unknown'
             END genderName,
             B.position_name,
-            A.start_date,
-            CASE
-                WHEN A.end_date is NULL THEN N'Đang làm'
-                ELSE N'Nghỉ việc'
-            END end_date_desc
+            DATE_FORMAT(A.start_date, '%d/%m/%Y') AS start_date
             FROM employees A
             LEFT JOIN positions B ON A.position_id = B.position_id
         ''')
@@ -79,17 +73,17 @@ class EmployeeService:
         cursor = self.db.connection.cursor()
         self.db.connection.cursor().execute(f'''
         UPDATE employees 
-        SET name = N'{data.name}', 
-        date_of_birth = '{data.date_of_birth}', 
-        gender = {data.gender} , 
-        address = N'{data.address}',
-        phone_number = '{data.phone_number}', 
-        email = '{data.email}', 
-        position_id = {data.position_id}, 
-        start_date = '{data.start_date}', 
-        id_card_number = {data.id_card_number},
-        username = '{data.username}'
-        WHERE employee_id = {data.employee_id}
+        SET name = N'{data["name"]}', 
+        date_of_birth = '{data["date_of_birth"]}', 
+        gender = {data["gender"]} , 
+        address = N'{data["address"]}',
+        phone_number = '{data["phone_number"]}', 
+        email = '{data["email"]}', 
+        position_id = {data["position_id"]}, 
+        start_date = '{data["start_date"]}', 
+        id_card_number = {data["id_card_number"]},
+        username = '{data["username"]}'
+        WHERE employee_id = {data["employee_id"]}
         ''')
         self.db.connection.commit()
 
@@ -110,17 +104,21 @@ class EmployeeService:
         cursor = self.db.connection.cursor()
 
         cursor.execute(f'''
-        SELECT employee_id, name, date_of_birth, gender, address, phone_number, email, position_id, start_date, id_card_number, end_date, username
+        SELECT employee_id, name, date_of_birth, gender, address, phone_number, email, position_id, start_date, id_card_number, username
         FROM employees                        
         WHERE employee_id = {id}
         ''')
+
+        columns_name = [desc[0] for desc in cursor.description]
 
         row = cursor.fetchone()
 
         cursor.close()
         self.db.close_connection()
 
-        return row
+        row_dict = dict(zip(columns_name, row))
+        return row_dict
+    
     def changePassword(self, id, passwordNew):
         self.db.connect_database()
 

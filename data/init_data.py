@@ -31,7 +31,7 @@ class InitData:
                     description VARCHAR(500) NULL,
                     location VARCHAR(200) NULL,
                     create_date DATE NOT NULL,
-                    manager_id INT NOT NULL
+                    manager_id INT NULL
                 )
             """
             create_table_position_query = """
@@ -54,7 +54,6 @@ class InitData:
                     email VARCHAR(50) NOT NULL,
                     position_id INT NOT NULL,
                     start_date DATE NOT NULL,
-                    end_date DATE NULL,
                     id_card_number VARCHAR(50) NOT NULL,
                     password VARCHAR(50),
                     username VARCHAR(50) NOT NULL
@@ -108,6 +107,26 @@ class InitData:
             cursor.execute(create_table_attendance_query)
             cursor.execute(create_table_role_query)
             cursor.execute(create_table_employee_role_query)
+
+            self.connection.commit()
+        except Error as e:
+            self.connection.rollback()
+            print(f"Error while creating table: {e}")
+        finally:
+            cursor.close()
+
+    def create_data(self):
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute("SELECT COUNT(*) FROM employees")
+            result = cursor.fetchone()
+            if result[0] == 0:
+                cursor.execute("INSERT INTO departments(department_name, description, location, create_date)VALUES(N'Admin', N'Không', 'HCM',CURDATE())")
+                cursor.execute("INSERT INTO positions (position_name, description, department_id, create_date)VALUES('Admin', 'Admin', 1, CURDATE())")
+                cursor.execute("INSERT INTO employees(name, date_of_birth, gender, address, phone_number, email, position_id, start_date, id_card_number, password, username)VALUES('ADMIN', CURDATE(), 1, 'HCM', '999', 'admin@gmail.com', 1, CURDATE(), '888', '1', 'admin')")
+                cursor.execute("INSERT INTO roles(role_name, description) VALUES('Admin', N'Toàn quyền truy cập và quản lý hệ thống')")
+                cursor.execute("INSERT INTO employee_roles(employee_id, role_id)VALUES(1, 1)")
+
             self.connection.commit()
         except Error as e:
             self.connection.rollback()

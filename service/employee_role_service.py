@@ -17,8 +17,8 @@ class EmployeeRoleService:
         )
         VALUES 
         (
-            {input.employee_id}, 
-            {input.role_id}
+            {input["employee_id"]}, 
+            {input["role_id"]}
         )
         ''')
 
@@ -49,9 +49,9 @@ class EmployeeRoleService:
         cursor = self.db.connection.cursor()
         self.db.connection.cursor().execute(f'''
         UPDATE employee_roles 
-        SET employee_id = {data.employee_id}, 
-        role_id = {data.role_id}
-        WHERE employee_role_id = {data.employee_role_id}
+        SET employee_id = {data["employee_id"]}, 
+        role_id = {data["role_id"]}
+        WHERE employee_role_id = {data["employee_role_id"]}
         ''')
         self.db.connection.commit()
 
@@ -70,12 +70,11 @@ class EmployeeRoleService:
     def getById(self, id):
         self.db.connect_database()
         cursor = self.db.connection.cursor()
-        print(id)
         cursor.execute(f'SELECT employee_role_id, employee_id, role_id  FROM employee_roles WHERE employee_role_id = {id}')
-
+        columns_name = [desc[0] for desc in cursor.description]
         row = cursor.fetchone()
 
         cursor.close()
         self.db.close_connection()
-
-        return row
+        row_dict = dict(zip(columns_name, row))
+        return row_dict

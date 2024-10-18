@@ -17,7 +17,7 @@ class CustomTreeView:
         self.columnShowBtn = columnShowBtn
 
         # Số mục trên mỗi trang
-        self.items_per_page = 4
+        self.items_per_page = 9
         self.current_page = 0
         self.buttons = []
         self.get_treeView()

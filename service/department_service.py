@@ -10,6 +10,7 @@ class DepartMentService:
     def insert(self, input):
         self.db.connect_database()
         cursor = self.db.connection.cursor()
+        
         self.db.connection.cursor().execute(f'''
         INSERT INTO departments (
             department_name, 
@@ -20,11 +21,11 @@ class DepartMentService:
         )
         VALUES 
         (
-            '{input.department_name}', 
-            '{input.description}',
-            '{input.location}',
-            {input.manager_id},
-            '{input.create_date}'
+            '{input["department_name"]}', 
+            '{input["description"]}',
+            '{input["location"]}',
+            {input["manager_id"]},
+            CURDATE()
         )
         ''')
 
@@ -38,7 +39,7 @@ class DepartMentService:
         cursor = self.db.connection.cursor()
         
         cursor.execute('''
-            SELECT A.department_id, A.department_name, A.description, A.location, A.create_date,
+            SELECT A.department_id, A.department_name, A.description, A.location, DATE_FORMAT( A.create_date, '%d/%m/%Y') as create_date,
             B.name
             FROM departments A
             LEFT JOIN employees B ON A.manager_id = B.employee_id
@@ -55,11 +56,11 @@ class DepartMentService:
         cursor = self.db.connection.cursor()
         self.db.connection.cursor().execute(f'''
         UPDATE departments 
-        SET department_name = N'{data.department_name}', 
-        description = N'{data.description}', 
-        location = N'{data.location}' , 
-        manager_id = {data.manager_id}
-        WHERE department_id = {data.department_id}
+        SET department_name = N'{data["department_name"]}', 
+        description = N'{data["description"]}', 
+        location = N'{data["location"]}' , 
+        manager_id = {data["manager_id"]}
+        WHERE department_id = {data["department_id"]}
         ''')
         self.db.connection.commit()
 
@@ -78,15 +79,14 @@ class DepartMentService:
     def getById(self, id):
         self.db.connect_database()
         cursor = self.db.connection.cursor()
-        print(id)
         cursor.execute(f'SELECT department_id, department_name, description, location, manager_id FROM departments WHERE department_id = {id}')
-
+        columns_name = [desc[0] for desc in cursor.description]
         row = cursor.fetchone()
 
         cursor.close()
         self.db.close_connection()
-
-        return row
+        row_dict = dict(zip(columns_name, row))
+        return row_dict
     
     def getCombobox(self):
         self.db.connect_database()

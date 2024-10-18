@@ -1,26 +1,21 @@
 import tkinter as tk
 from tkinter import ttk
 from tkcalendar import DateEntry
-from tkinter import messagebox
+from helper.CustomComboboxGrid import CustomComboboxGrid
+from helper.CustomInputGridText import CustomInputGridText
+from helper.CustomInputDateGrid import CustomInputDateGrid
+import time
 
-class EmployeeFormPopup(tk.Toplevel):
-    def __init__(self, parent, data):
+class FormPopup(tk.Toplevel):
+    def __init__(self, parent, title, form_fields ,form_data=None, width = 640, height = 300):
         super().__init__(parent)
-        """
-            data:
-            model:
-            width:
-            height:
-            title: 
-        
-        """
-        self.geometry("640x300")
-        self.title(parent.title_popup)
+        self.withdraw()
+        self.geometry(f"{width}x{height}")
+        self.title(title)
         self.parent = parent
-        self.selected_position_id = None
         
-        window_width = 640
-        window_height = 300
+        window_width = width
+        window_height = height
         screen_width = parent.winfo_screenwidth()
         screen_height = parent.winfo_screenheight()
 
@@ -32,134 +27,127 @@ class EmployeeFormPopup(tk.Toplevel):
 
         self.grab_set()
 
-        self.entry_id = tk.Entry(self)
-        self.entry_id.grid(row=0, column=1)
-        self.entry_id.grid_remove()
+        self.form_fields = form_fields  # Danh sách các trường cần hiển thị
 
-        label_name = tk.Label(self, text="Họ và tên:")
-        label_name.grid(row=0, column=0, padx=10, pady=10, sticky="e")
-        self.entry_name = tk.Entry(self, width=30)
-        self.entry_name.grid(row=0, column=1, padx=10, pady=10)
+        self.field_widgets = {}
 
-        label_date = tk.Label(self, text="Ngày sinh:")
-        label_date.grid(row=0, column=2, padx=10, pady=10, sticky="e")
-        self.birth_day = DateEntry(self, width=30-4, background='drakblue', foreground='white', borderwidth=2, year=1990)
-        self.birth_day.grid(row=0, column=3, padx=10, pady=10)
-
-        label_gender = tk.Label(self, text="Giới tính:")
-        label_gender.grid(row=1, column=0, padx=10, pady=10, sticky="e")
-        self.gender_combobox = ttk.Combobox(self, width=30-4, values=["Nam", "Nữ"], state="readonly")
-        self.gender_combobox.grid(row=1, column=1, padx=10, pady=10)
-        self.gender_combobox.current(0)
-
-        label_address = tk.Label(self, text="Địa chỉ:")
-        label_address.grid(row=1, column=2, padx=10, pady=10, sticky="e")
-        self.entry_address = tk.Entry(self, width=30)
-        self.entry_address.grid(row=1, column=3, padx=10, pady=10)
-
-        label_phone_number = tk.Label(self, text="Số điện thoại:")
-        label_phone_number.grid(row=2, column=0, padx=10, pady=10, sticky="e")
-        self.entry_phone_number = tk.Entry(self, width=30)
-        self.entry_phone_number.grid(row=2, column=1, padx=10, pady=10)
-
-        label_email = tk.Label(self, text="Email:")
-        label_email.grid(row=2, column=2, padx=10, pady=10, sticky="e")
-        self.entry_email = tk.Entry(self, width=30)
-        self.entry_email.grid(row=2, column=3, padx=10, pady=10)
-
-        label_position = tk.Label(self, text="Vị trí:")
-        label_position.grid(row=3, column=0, padx=10, pady=10, sticky="e")
-        self.position_combobox = ttk.Combobox(self, width=30-4, state="readonly")
-        self.position_combobox.grid(row=3, column=1, padx=10, pady=10)
-        self.position_combobox['values'] = [f"{pos[1]}" for pos in parent.data_position]
-        self.position_combobox.current(0)
-        self.position_combobox.bind("<<ComboboxSelected>>", self.on_position_selected)
-
-        label_start_date = tk.Label(self, text="Ngày bắt đầu:")
-        label_start_date.grid(row=3, column=2, padx=10, pady=10, sticky="e")
-        self.start_date = DateEntry(self, width=30-4, background='drakblue', foreground='white', borderwidth=2, year=1990)
-        self.start_date.grid(row=3, column=3, padx=10, pady=10)
-
-        label_id_card_number = tk.Label(self, text="CCCD/CMND:")
-        label_id_card_number.grid(row=4, column=0, padx=10, pady=10, sticky="e")
-        self.entry_id_card_number = tk.Entry(self, width=30)
-        self.entry_id_card_number.grid(row=4, column=1, padx=10, pady=10)
-
-        label_end_date = tk.Label(self, text="Ngày kết thúc:")
-        label_end_date.grid(row=4, column=2, padx=10, pady=10, sticky="e")
-        self.end_date = DateEntry(self, width=30-4, background='drakblue', foreground='white', borderwidth=2)
-        self.end_date.grid(row=4, column=3, padx=10, pady=10)
-
-        label_username = tk.Label(self, text="Tên đăng nhập:")
-        label_username.grid(row=5, column=0, padx=10, pady=10, sticky="e")
-        self.entry_username = tk.Entry(self, width=30)
-        self.entry_username.grid(row=5, column=1, padx=10, pady=10)
+        self.create_form_widgets()
 
         button_frame = tk.Frame(self)
-        button_frame.grid(row=6, column=3, padx=10, pady=10, sticky="e")
-
-        # Nếu edit insert data và điều chỉnh readonly
-        if(data is not None):
-            gender_value = 'Nam' if data[3] else 'Nữ'
-            self.entry_id.insert(0, data[0])
-            self.entry_name.insert(0, data[1])
-            self.birth_day.set_date(data[2])
-            self.gender_combobox.set(gender_value)
-            self.entry_address.insert(0, data[4])
-            self.entry_phone_number.insert(0, data[5])
-            self.entry_email.insert(0, data[6])
-            self.set_position_combobox(data[7])
-            self.start_date.set_date(data[8])
-            self.entry_id_card_number.insert(0, data[9])
-            self.end_date.set_date(data[10])
-            self.entry_username.insert(0, data[11])
-
+        button_frame.grid(row=len(self.form_fields) + 1, column=3, padx=10, pady=10)
 
         self.button_close = tk.Button(button_frame, text="Đóng", command=self.destroy)
         self.button_close.pack(side="right", padx=5)
 
-        self.button_save = tk.Button(button_frame, text="Lưu", command=self.save_employee)
+        self.button_save = tk.Button(button_frame, text="Lưu", command=self.save_form_data)
         self.button_save.pack(side="right", padx=5)
 
-    def save_employee(self):
-        gender_value = 1 if self.gender_combobox.get() == 'Nam' else 0
-        employee_id = self.entry_id.get() if self.entry_id.get() is not None else None
-        position = self.selected_position_id
+        # Gắn dữ liệu vào form nếu có form_data
+        if form_data is not None:
+            self.populate_form_data(form_data)
 
-        employee_input = employee_model(
-            employee_id= employee_id,
-            name = self.entry_name.get(),
-            date_of_birth = self.birth_day.get_date().strftime('%Y-%m-%d'),
-            gender = gender_value,
-            address = self.entry_address.get(),
-            phone_number = self.entry_phone_number.get(),
-            email = self.entry_email.get(),
-            position_id = position,
-            start_date = self.start_date.get_date().strftime('%Y-%m-%d'),
-            id_card_number = self.entry_id_card_number.get(),
-            password='1',
-            end_date=self.end_date.get_date().strftime('%Y-%m-%d'),
-            username=self.entry_username.get()
-        )
+        self.deiconify()
 
-        if employee_input.employee_id is None or employee_input.employee_id == "":
-            self.parent.insert(employee_input)
-            self.destroy()
-        else:
-            self.parent.update(employee_input)
-            self.destroy()
+    def create_form_widgets(self):
+        for idx, field in enumerate(self.form_fields):
+            field_type = field.get('type')
+            if(field_type == "ID"):
+                entry = tk.Entry(self, width=30)
+                entry.grid(row=0, column=1)
+                self.field_widgets[field['name']] = entry
+                entry.grid_remove()
             
-    def on_position_selected(self, event):
-        selected_position_name = self.position_combobox.get()
-        self.selected_position_id = None
-        for pos in self.parent.data_position:
-            if pos[1] == selected_position_name:
-                self.selected_position_id = pos[0]
-                break
-    
-    def set_position_combobox(self, position_id):
-        self.selected_position_id = position_id
-        for pos in self.parent.data_position:
-            if pos[0] == position_id:
-                self.position_combobox.set(pos[1])  
-                break
+            field_label = tk.Label(self, text=field.get('label') + ':')
+            field_label.grid(row=field['row'], column=field['col1'], padx=10, pady=5, sticky="e")
+            if field_type == "Entry":
+                entry = tk.Entry(self, width=30)
+                entry.grid(row=field['row'], column=field['col2'], padx=10, pady=5)
+                self.field_widgets[field['name']] = entry
+            elif field_type == "DateEntry":
+                date_entry = DateEntry(self, width=30-4)
+                date_entry.grid(row=field['row'], column=field['col2'], padx=10, pady=5)
+                self.field_widgets[field['name']] = date_entry
+            elif field_type == "Combobox":
+                combobox = ttk.Combobox(self, width=30-4, values=field.get('values', []), state="readonly")
+                combobox.grid(row=field['row'], column=field['col2'], padx=10, pady=5)
+                self.field_widgets[field['name']] = combobox
+            elif field_type == "CustomInput":
+                entry = CustomInputGridText(self, field['label'], 30, field['col2'], field['row'])
+                self.field_widgets[field['name']] = entry
+            elif field_type == "ComboboxCustom":
+                comboboxcustom = CustomComboboxGrid(parent = self, text=field['label'], dataArray= field.get('values', []), width=30-4, gridCol= field['col2'], gridRow=field['row'])
+                self.field_widgets[field['name']] = comboboxcustom
+            elif field_type == "CustomDate":
+                date_entry = CustomInputDateGrid(self, field['label'], 30-4, "", "", field['col2'], field['row'])
+                self.field_widgets[field['name']] = date_entry
+                
+
+
+    def save_form_data(self):
+        form_data = {}
+        for field_name, widget in self.field_widgets.items():
+            if isinstance(widget, (tk.Entry, ttk.Combobox)):
+                form_data[field_name] = widget.get()
+            elif isinstance(widget, DateEntry):
+                form_data[field_name] = widget.get_date().strftime('%Y-%m-%d')
+            elif isinstance(widget, (CustomComboboxGrid, CustomInputGridText)):
+                form_data[field_name] = widget.get_value()
+            elif isinstance(widget, CustomInputDateGrid):
+                form_data[field_name] = widget.get_value().strftime('%Y-%m-%d')
+
+        print(form_data)
+        if(not self.validation_all()): return
+
+        id = next(iter(form_data.values()))
+        if(id is None or id == ''):
+            result = self.parent.insert(form_data)
+        else:
+            result = self.parent.update(form_data)
+
+        if(result): self.destroy()
+
+    def populate_form_data(self, form_data):
+        for field_name, value in form_data.items():
+            widget = self.field_widgets.get(field_name)
+            if widget is not None:
+                if isinstance(widget, tk.Entry):
+                    widget.delete(0, tk.END)
+                    if value is not None:
+                        widget.insert(0, value) 
+                elif isinstance(widget, DateEntry):
+                    try:
+                        widget.set_date(value) 
+                    except ValueError:
+                        widget.set_date("") 
+                elif isinstance(widget, ttk.Combobox):
+                    if value in widget['values']:
+                        widget.set(value)
+                elif isinstance(widget, CustomComboboxGrid):
+                    widget.set_combobox(value)
+                elif isinstance(widget, CustomInputGridText):
+                    widget.delete_value()
+                    if value is not None:
+                        widget.set_value(value)
+                elif isinstance(widget , CustomInputDateGrid):
+                    try:
+                        widget.set_date(value) 
+                    except ValueError:
+                        widget.set_date("") 
+                    
+    def validation_all(self):
+        for field_name, widget in self.field_widgets.items():
+            if isinstance(widget, CustomComboboxGrid):
+                if(not widget.validate_input()):  
+                    return False
+            elif isinstance(widget, CustomInputGridText):
+                if(not widget.validate_input()):
+                    return False
+            elif isinstance(widget, CustomInputDateGrid):
+                if(not widget.validate_input()):
+                    return False
+        return True
+
+    def prepare_popup_data(self):
+        print("Đang chuẩn bị dữ liệu cho popup...")
+        time.sleep(2)  # Giả lập một hàm chờ 2 giây để chuẩn bị dữ liệu (có thể thay bằng logic xử lý khác)
+        print("Dữ liệu đã sẵn sàng!")

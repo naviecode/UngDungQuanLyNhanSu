@@ -10,6 +10,7 @@ class RoleService:
     def insert(self, input):
         self.db.connect_database()
         cursor = self.db.connection.cursor()
+        
         self.db.connection.cursor().execute(f'''
         INSERT INTO roles (
             role_name,
@@ -17,8 +18,8 @@ class RoleService:
         )
         VALUES 
         (
-            N'{input.role_name}',
-            N'{input.description}'
+            N'{input["role_name"]}',
+            N'{input["description"]}'
         )
         ''')
 
@@ -44,9 +45,9 @@ class RoleService:
         cursor = self.db.connection.cursor()
         self.db.connection.cursor().execute(f'''
         UPDATE roles 
-        SET role_name = '{data.role_name}', 
-        description = N'{data.description}'
-        WHERE role_id = {data.role_id}
+        SET role_name = '{data["role_name"]}', 
+        description = N'{data["description"]}'
+        WHERE role_id = {data["role_id"]}
         ''')
         self.db.connection.commit()
 
@@ -65,15 +66,14 @@ class RoleService:
     def getById(self, id):
         self.db.connect_database()
         cursor = self.db.connection.cursor()
-        print(id)
-        cursor.execute(f'SELECT * FROM roles WHERE role_id = {id}')
-
+        cursor.execute(f'SELECT role_id, role_name, description FROM roles WHERE role_id = {id}')
+        columns_name = [desc[0] for desc in cursor.description]
         row = cursor.fetchone()
 
         cursor.close()
         self.db.close_connection()
-
-        return row
+        row_dict = dict(zip(columns_name, row))
+        return row_dict
     def getCombobox(self):
         self.db.connect_database()
         cursor = self.db.connection.cursor()

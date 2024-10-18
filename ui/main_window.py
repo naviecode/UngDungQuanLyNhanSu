@@ -23,6 +23,7 @@ class main_window:
         self.db = InitData(config)
         self.db.connect_database()
         self.db.create_table()
+        self.db.create_data()
         self.db.close_connection()
 
         self.root.frames = {}
