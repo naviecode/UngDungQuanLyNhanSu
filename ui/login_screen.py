@@ -1,11 +1,15 @@
 import tkinter as tk
 from tkinter import messagebox
+from service.employee_service import EmployeeService
+import globals
+from models.user.user_model import User
+
 
 class LoginScreen:
     def __init__(self, master, main_app):
         self.master = master
         self.main_app = main_app
-
+        self.employee_service = EmployeeService()
         x = (main_app.screen_width //2) - (350//2)
         y = (main_app.screen_height //2) - (200//2)
         self.master.geometry(f'{350}x{200}+{x}+{y}')
@@ -32,8 +36,9 @@ class LoginScreen:
         self.button_exit.pack(pady=20)
     
     def is_login(self, username, password):
-        # Kiểm tra username và password
-        if username == "admin" and password == "1":
+        result = self.employee_service.getLoginUser(username, password)
+        if result is not None:
+            globals.current_user = User(result[0],result[1],result[2])
             return True
         else:
             return False

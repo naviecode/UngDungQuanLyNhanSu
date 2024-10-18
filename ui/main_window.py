@@ -6,7 +6,7 @@ from ui.login_screen import LoginScreen
 from data.init_data import InitData
 import configparser
 from tkinter import messagebox
-
+import globals
 
 class main_window:
     def __init__(self, master):
@@ -39,6 +39,7 @@ class main_window:
         if not self.is_logged_in:
             self.root.withdraw()
             self.open_login_window()
+        
 
     def open_login_window(self):
         # Mở trang đăng nhập
@@ -48,8 +49,8 @@ class main_window:
     def open_main_window(self):
         # Hiển thị giao diện chính sau khi đăng nhập thành công
         self.is_logged_in = True  # Đánh dấu trạng thái đăng nhập
-        self.root.deiconify()   
-        
+        self.root.deiconify()       
+
         self.main_frame = tk.Frame(self.root)
         self.main_frame.pack(fill="both", expand=True)
         #header
@@ -75,6 +76,7 @@ class main_window:
         # Hàm đăng xuất
         self.is_logged_in = False
         messagebox.showinfo("Đăng xuất", "Bạn đã đăng xuất!")
+        globals.current_user = None
         self.main_frame.destroy()  # Xóa giao diện chính
         self.check_login()  # Quay lại trang đăng nhập
 

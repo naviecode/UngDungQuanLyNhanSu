@@ -1,119 +1,19 @@
 import tkinter as tk
 from tkinter import ttk
-from ui.pages.BasePage import BasePage
-from service.employee_service import EmployeeService
-from service.position_service import PositionService
-from models.employee.employee_model import employee_model
 from tkcalendar import DateEntry
 from tkinter import messagebox
-from helper.CustomTreeView import CustomTreeView
-import time
 
-class Employee(BasePage):
-    def __init__(self, parent, controller):
-        super().__init__(parent)
-        label = tk.Label(self, text="QUẢN LÝ NHÂN SỰ", font=("Helvetica", 16))
-        label.pack(pady=20, side="top", fill="x", expand=True)
-        self.position_service = PositionService()
-        self.data_position = self.position_service.getCombobox()
-        columns = [
-            {
-                'key': 'ID',
-                'name': 'ID',
-                'width': 10,
-                'anchor': 'center'
-            },
-            {
-                'key': 'Name',
-                'name': 'Họ tên',
-                'width': 150,
-                'anchor': 'center'
-            },
-            {
-                'key': 'Phone',
-                'name': 'Số điện thoại',
-                'width': 150,
-                'anchor': 'center'
-            },
-            {
-                'key': 'Gender',
-                'name': 'Giới tính',
-                'width': 20,
-                'anchor': 'center'
-            },
-            {
-                'key': 'Position',
-                'name': 'Chức vụ',
-                'width': 80,
-                'anchor': 'center'
-            },
-            {
-                'key': 'StartDate',
-                'name': 'Ngày bắt đầu',
-                'width': 80,
-                'anchor': 'center'
-            },
-            {
-                'key': 'EndDate',
-                'name': 'Ngày kết thúc',
-                'width': 80,
-                'anchor': 'center'
-            },
-            {
-                'key': 'Action',
-                'name': 'Hành động',
-                'width': 100,
-                'anchor': 'center'
-            }
-        ]
-        
-
-        #Get view
-        self.frame_view = tk.Frame(self)
-        self.frame_view.pack(padx=10, fill="both", expand=True)
-        self.employee_service = EmployeeService()
-        self.datas = self.search()
-        self.treeView = CustomTreeView(self.frame_view, self, self.datas, columns, len(columns) - 1)
-
-    def search(self):
-        rows = self.employee_service.search()
-        return rows
-    
-    def add(self):
-        self.title_popup = "Thêm mới nhân viên"
-        form_popup = EmployeeFormPopup(self, None)
-    
-    def edit(self, row_id):
-        self.title_popup = "Cập nhập nhân viên"
-        data = self.employee_service.getById(row_id)
-        form_popup = EmployeeFormPopup(self, data)
-
-    def insert(self, data):
-        confirm = messagebox.askyesno("Xác nhận thêm mới", "Bạn có chắc chắn muốn thêm mới ?")
-        if confirm:
-            print(data)
-            result = self.employee_service.insert(data)
-            self.treeView.loadData()
-
-    
-    def update(self, data):
-        confirm = messagebox.askyesno("Xác nhận cập nhập", "Bạn có chắc chắn muốn cập nhập ?")
-        if confirm:
-            result = self.employee_service.update(data)
-            self.treeView.loadData()
-    
-    def delete(self, row_id):
-        confirm = messagebox.askyesno("Xác nhận xóa", "Bạn có chắc chắn muốn xóa nhân viên này?")
-        if confirm:
-            result = self.employee_service.delete(row_id)
-            self.treeView.loadData()
-
-    
 class EmployeeFormPopup(tk.Toplevel):
     def __init__(self, parent, data):
         super().__init__(parent)
-        self.withdraw()
-        # self.prepare_popup_data()
+        """
+            data:
+            model:
+            width:
+            height:
+            title: 
+        
+        """
         self.geometry("640x300")
         self.title(parent.title_popup)
         self.parent = parent
@@ -221,8 +121,6 @@ class EmployeeFormPopup(tk.Toplevel):
         self.button_save = tk.Button(button_frame, text="Lưu", command=self.save_employee)
         self.button_save.pack(side="right", padx=5)
 
-        self.deiconify()
-
     def save_employee(self):
         gender_value = 1 if self.gender_combobox.get() == 'Nam' else 0
         employee_id = self.entry_id.get() if self.entry_id.get() is not None else None
@@ -250,6 +148,7 @@ class EmployeeFormPopup(tk.Toplevel):
         else:
             self.parent.update(employee_input)
             self.destroy()
+            
     def on_position_selected(self, event):
         selected_position_name = self.position_combobox.get()
         self.selected_position_id = None
@@ -264,8 +163,3 @@ class EmployeeFormPopup(tk.Toplevel):
             if pos[0] == position_id:
                 self.position_combobox.set(pos[1])  
                 break
-    def prepare_popup_data(self):
-        print("Đang chuẩn bị dữ liệu cho popup...")
-        time.sleep(2)  # Giả lập một hàm chờ 2 giây để chuẩn bị dữ liệu (có thể thay bằng logic xử lý khác)
-        print("Dữ liệu đã sẵn sàng!")
-
