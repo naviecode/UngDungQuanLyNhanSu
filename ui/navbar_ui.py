@@ -1,5 +1,9 @@
 import tkinter as tk
 from PIL import Image, ImageTk
+from tkinter import messagebox
+from datetime import datetime
+from models.attendance.attendance_model import attendance_model
+from service.attendance_service import AttendanceService
 from ui.pages.Overview import Overview
 from ui.pages.Employee import Employee
 from ui.pages.Contract import Contract
@@ -17,6 +21,7 @@ import globals
 class Navbar(tk.Frame):
     def __init__(self, parent, frames):
         super().__init__(parent)
+        self.attendance_service = AttendanceService()
         #Navigation
         navigation = tk.Frame(self, bg="white", width=250)
         navigation.pack(side="left", fill="y")
@@ -33,8 +38,8 @@ class Navbar(tk.Frame):
         nav_user_image = Image.open("./images/icons/fingerprint.png")
         resized_nav_user_image = nav_user_image.resize((40,40))
         self.nav_user_image = ImageTk.PhotoImage(resized_nav_user_image)
-        nav_user_image_label = tk.Label(nav_user, image=self.nav_user_image, bg="#0178bc", cursor="hand2")
-        nav_user_image_label.pack(pady=20)
+        nav_user_image_button = tk.Button(nav_user, image=self.nav_user_image, bg="#0178bc", cursor="hand2", command=self.attendance, bd=0)
+        nav_user_image_button.pack(pady=20)
 
         label = tk.Label(nav_user, text= globals.current_user.username, font=("Arial", 16), bg="#0178bc", fg="white")
         label.pack()
@@ -120,10 +125,26 @@ class Navbar(tk.Frame):
 
     def show_page(self, page):
         frame = self.frames[page]
+        frame.clear_frame_data()
         frame.tkraise()
+        frame.on_show_frame()
 
     def initNav(self, content, parent):
         for F in (Overview, Department, Position, Employee, Contract, Role, Timesheet, License, EmployeeRole):
             frame = F(content, parent)
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky="nsew")
+    
+    def attendance(self):
+        response = messagebox.askyesno("Chấm công", "Bạn có muốn thực hiện chấm công?")
+        if response:
+            data = attendance_model(
+                employee_id=globals.current_user.employee_id,
+                check_in = datetime.now(),
+                check_out = datetime.now(),
+                status = 'Present',
+                work_date = datetime.now().date(),
+                remarks = "No"
+            )
+            self.attendance_service.handle(data)
+            messagebox.showinfo("Thông báo", "Xin cảm ơn")

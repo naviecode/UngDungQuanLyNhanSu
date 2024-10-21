@@ -87,7 +87,12 @@ class PositionService:
         self.db.connect_database()
         cursor = self.db.connection.cursor()
         
-        cursor.execute('SELECT position_id, position_name FROM positions')
+        cursor.execute('''
+            SELECT A.position_id,  
+            CONCAT(A.position_name, '(', B.department_name, ')') AS position_name 
+            FROM positions A
+            LEFT JOIN departments B ON A.department_id = B.department_id
+        ''')
         rows = cursor.fetchall()
 
         cursor.close()
