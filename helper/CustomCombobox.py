@@ -2,18 +2,15 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 
-class CustomComboboxGrid:
-    def __init__(self, parent, text, dataArray, width, gridCol, gridRow):
+class CustomCombobox:
+    def __init__(self, parent, text, dataArray, width):
         self.selected_id = None
         self.datas = dataArray
         self.text = text
         self.combobox = ttk.Combobox(parent, width=width, state="readonly")
         self.combobox['values'] = [f"{pos[1]}" for pos in dataArray]
-        self.combobox.grid(row=gridRow, column=gridCol, padx=10, pady=10)
         self.combobox.set('')
         self.combobox.bind("<<ComboboxSelected>>", self.on_selected)
-
-
 
     def validate_input(self):
         if self.combobox.get() == "":
@@ -39,4 +36,7 @@ class CustomComboboxGrid:
             if data[0] == position_id:
                 self.combobox.set(data[1])  
                 break
+    def grid(self, row, column, padx=10, pady=10):
+        self.combobox.grid(row=row, column=column, padx=padx, pady=pady)
+
         

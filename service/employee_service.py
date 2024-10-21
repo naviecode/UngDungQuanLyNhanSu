@@ -119,17 +119,19 @@ class EmployeeService:
         row_dict = dict(zip(columns_name, row))
         return row_dict
     
-    def changePassword(self, id, passwordNew):
+    def changePassword(self, id, passwordOld, passwordNew):
         self.db.connect_database()
 
         cursor = self.db.connection.cursor()
-        self.db.connection.cursor().execute(f'''
-        UPDATE employees SET password = '{passwordNew}' WHERE employee_id = {id}
+        cursor.execute(f'''
+        UPDATE employees SET password = '{passwordNew}' WHERE employee_id = {id} and password = {passwordOld}
         ''')
         self.db.connection.commit()
 
         cursor.close()
         self.db.close_connection()
+
+        return cursor.rowcount
 
     def getCombox(self):
         self.db.connect_database()
@@ -151,7 +153,7 @@ class EmployeeService:
         cursor = self.db.connection.cursor()
         
         cursor.execute(f'''
-            SELECT A.name, C.role_id, C.role_name
+            SELECT A.employee_id, A.name, C.role_id, C.role_name
             FROM employees A
             LEFT JOIN employee_roles B ON A.employee_id = B.employee_id
             LEFT JOIN roles C ON B.role_id = C.role_id
@@ -163,3 +165,24 @@ class EmployeeService:
         self.db.close_connection()
 
         return row
+    
+    def getInfoUser(self, empId):
+        self.db.connect_database()
+        cursor = self.db.connection.cursor()
+
+        cursor.execute(f'''
+        SELECT employee_id, A.name, A.email, A.start_date, B.position_name
+        FROM employees A                      
+        LEFT JOIN positions B on A.position_id = B.position_id
+        WHERE employee_id = {empId}
+        ''')
+
+        columns_name = [desc[0] for desc in cursor.description]
+
+        row = cursor.fetchone()
+
+        cursor.close()
+        self.db.close_connection()
+
+        row_dict = dict(zip(columns_name, row))
+        return row_dict

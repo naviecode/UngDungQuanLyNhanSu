@@ -6,7 +6,7 @@ class BasePage(tk.Frame):
     def __init__(self, parent):
         super().__init__(parent)       
 
-        nav_base = tk.Frame(self, height=40)
+        nav_base = tk.Frame(self, height=30)
         nav_base.pack(padx=10,fill="x",expand=True)
         nav_base.pack_propagate(False)
 
@@ -16,6 +16,7 @@ class BasePage(tk.Frame):
         self.button_add = ButtonImage(nav_base, "./images/icons/add.png", "Thêm mới", self.add,width=150, height=30, bg="#0178bc", fg="white")
         self.button_add.pack(side="right")
 
+        nav_base._from_base = True
        
 
     def add(self):
