@@ -1,13 +1,13 @@
 import tkinter as tk
 from tkinter import ttk
 from tkcalendar import DateEntry
-from helper.CustomComboboxGrid import CustomComboboxGrid
-from helper.CustomInputGridText import CustomInputGridText
-from helper.CustomInputDateGrid import CustomInputDateGrid
+from helper.CustomCombobox import CustomCombobox
+from helper.CustomInputText import CustomInputText
+from helper.CustomInputDate import CustomInputDate
 import time
 
 class FormPopup(tk.Toplevel):
-    def __init__(self, parent, title, form_fields ,form_data=None, width = 640, height = 300):
+    def __init__(self, parent, title, form_fields ,type = None, form_data=None, width = 640, height = 300):
         super().__init__(parent)
         self.withdraw()
         self.geometry(f"{width}x{height}")
@@ -27,7 +27,7 @@ class FormPopup(tk.Toplevel):
 
         self.grab_set()
 
-        self.form_fields = form_fields  # Danh sách các trường cần hiển thị
+        self.form_fields = form_fields  
 
         self.field_widgets = {}
 
@@ -39,8 +39,12 @@ class FormPopup(tk.Toplevel):
         self.button_close = tk.Button(button_frame, text="Đóng", command=self.destroy)
         self.button_close.pack(side="right", padx=5)
 
-        self.button_save = tk.Button(button_frame, text="Lưu", command=self.save_form_data)
-        self.button_save.pack(side="right", padx=5)
+        if type is 'View':
+            self.button_save = tk.Button(button_frame, text="Duyệt")
+            self.button_save.pack(side="right", padx=5)
+        else:
+            self.button_save = tk.Button(button_frame, text="Lưu", command=self.save_form_data)
+            self.button_save.pack(side="right", padx=5)
 
         # Gắn dữ liệu vào form nếu có form_data
         if form_data is not None:
@@ -72,13 +76,16 @@ class FormPopup(tk.Toplevel):
                 combobox.grid(row=field['row'], column=field['col2'], padx=10, pady=5)
                 self.field_widgets[field['name']] = combobox
             elif field_type == "CustomInput":
-                entry = CustomInputGridText(self, field['label'], 30, field['col2'], field['row'])
+                entry = CustomInputText(self, field['label'], 30)
+                entry.grid(row=field['row'], column=field['col2'], padx=10, pady=10)
                 self.field_widgets[field['name']] = entry
             elif field_type == "ComboboxCustom":
-                comboboxcustom = CustomComboboxGrid(parent = self, text=field['label'], dataArray= field.get('values', []), width=30-4, gridCol= field['col2'], gridRow=field['row'])
+                comboboxcustom = CustomCombobox(parent = self, text=field['label'], dataArray= field.get('values', []), width=30-4)
+                comboboxcustom.grid(row=field['row'], column=field['col2'], padx=10, pady=10)
                 self.field_widgets[field['name']] = comboboxcustom
             elif field_type == "CustomDate":
-                date_entry = CustomInputDateGrid(self, field['label'], 30-4, "", "", field['col2'], field['row'])
+                date_entry = CustomInputDate(self, field['label'], 30-4, "", "")
+                date_entry.grid(row=field['row'], column=field['col2'], padx=10, pady=10)
                 self.field_widgets[field['name']] = date_entry
                 
 
@@ -90,12 +97,11 @@ class FormPopup(tk.Toplevel):
                 form_data[field_name] = widget.get()
             elif isinstance(widget, DateEntry):
                 form_data[field_name] = widget.get_date().strftime('%Y-%m-%d')
-            elif isinstance(widget, (CustomComboboxGrid, CustomInputGridText)):
+            elif isinstance(widget, (CustomCombobox, CustomInputText)):
                 form_data[field_name] = widget.get_value()
-            elif isinstance(widget, CustomInputDateGrid):
+            elif isinstance(widget, CustomInputDate):
                 form_data[field_name] = widget.get_value().strftime('%Y-%m-%d')
 
-        print(form_data)
         if(not self.validation_all()): return
 
         id = next(iter(form_data.values()))
@@ -122,13 +128,13 @@ class FormPopup(tk.Toplevel):
                 elif isinstance(widget, ttk.Combobox):
                     if value in widget['values']:
                         widget.set(value)
-                elif isinstance(widget, CustomComboboxGrid):
+                elif isinstance(widget, CustomCombobox):
                     widget.set_combobox(value)
-                elif isinstance(widget, CustomInputGridText):
+                elif isinstance(widget, CustomInputText):
                     widget.delete_value()
                     if value is not None:
                         widget.set_value(value)
-                elif isinstance(widget , CustomInputDateGrid):
+                elif isinstance(widget , CustomInputDate):
                     try:
                         widget.set_date(value) 
                     except ValueError:
@@ -136,13 +142,13 @@ class FormPopup(tk.Toplevel):
                     
     def validation_all(self):
         for field_name, widget in self.field_widgets.items():
-            if isinstance(widget, CustomComboboxGrid):
+            if isinstance(widget, CustomCombobox):
                 if(not widget.validate_input()):  
                     return False
-            elif isinstance(widget, CustomInputGridText):
+            elif isinstance(widget, CustomInputText):
                 if(not widget.validate_input()):
                     return False
-            elif isinstance(widget, CustomInputDateGrid):
+            elif isinstance(widget, CustomInputDate):
                 if(not widget.validate_input()):
                     return False
         return True

@@ -1,11 +1,10 @@
 import tkinter as tk
 from tkinter import messagebox
 
-class CustomInputGridText:
-    def __init__(self, parent, text, width, gridCol, gridRow):
+class CustomInputText:
+    def __init__(self, parent, text, width = None, show = None):
         self.text = text
-        self.entry_input = tk.Entry(parent, width=width)
-        self.entry_input.grid(row=gridRow, column=gridCol, padx=10, pady=10)
+        self.entry_input = tk.Entry(parent, width=width, show=show)
 
 
     def validate_input(self):
@@ -33,4 +32,9 @@ class CustomInputGridText:
     
     def delete_value(self):
         self.entry_input.delete(0, tk.END)
-        
+    
+    def grid(self, row, column, padx = 0, pady = 0):
+        self.entry_input.grid(row=row, column=column, padx=padx, pady=pady)
+
+    def pack(self, padx=0, pady=0):
+        self.entry_input.pack(padx=padx, pady=pady)
