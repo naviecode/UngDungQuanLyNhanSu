@@ -3,6 +3,7 @@ from tkinter import messagebox
 from service.employee_service import EmployeeService
 import globals
 from models.user.user_model import User
+from helper.CustomInputText import CustomInputText
 
 
 class LoginScreen:
@@ -18,13 +19,13 @@ class LoginScreen:
         # Label và Entry cho tên người dùng
         self.label_username = tk.Label(master, text="Tên người dùng:")
         self.label_username.pack(pady=5)
-        self.entry_username = tk.Entry(master)
+        self.entry_username = CustomInputText(master, 'Tên người dùng')
         self.entry_username.pack(pady=5)
 
         # Label và Entry cho mật khẩu
         self.label_password = tk.Label(master, text="Mật khẩu:")
         self.label_password.pack(pady=5)
-        self.entry_password = tk.Entry(master, show="*")  # Hiển thị dấu *
+        self.entry_password = CustomInputText(master,'Mật khẩu', show="*")  # Hiển thị dấu *
         self.entry_password.pack(pady=5)
 
         # Nút Đăng Nhập
@@ -38,15 +39,19 @@ class LoginScreen:
     def is_login(self, username, password):
         result = self.employee_service.getLoginUser(username, password)
         if result is not None:
-            globals.current_user = User(result[0],result[1],result[2])
+            globals.current_user = User(result[0],result[1],result[2], result[3])
+
             return True
         else:
             return False
         
 
     def check_login(self):
-        username = self.entry_username.get()
-        password = self.entry_password.get()
+
+        if(not self.entry_username.validate_input() or not self.entry_password.validate_input()):return
+
+        username = self.entry_username.get_value().strip()
+        password = self.entry_password.get_value().strip()
 
         if self.is_login(username, password):
             messagebox.showinfo("Thành công", "Đăng nhập thành công!")

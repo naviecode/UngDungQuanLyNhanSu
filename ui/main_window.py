@@ -3,6 +3,7 @@ from ui.header_ui import Header
 from ui.navbar_ui import Navbar
 from ui.pages.Overview import Overview
 from ui.login_screen import LoginScreen
+from models.user.user_model import User
 from data.init_data import InitData
 import configparser
 from tkinter import messagebox
@@ -10,14 +11,13 @@ import globals
 
 class main_window:
     def __init__(self, master):
+        globals.current_user = User(1,"username",1, "username")
+
         self.root = master
         self.root.title("Ứng dụng Quản lý Nhân sự")
         self.screen_width = master.winfo_screenwidth()
         self.screen_height = master.winfo_screenheight()
-        x = (self.screen_width //2) - (1600//2)
-        y = (self.screen_height //2) - (600//2)
-        self.root.geometry(f'{1600}x{600}+{x}+{y}')
-        #Connect database and create table
+        self.root.geometry(f'{self.screen_width}x{self.screen_height}')
         config = configparser.ConfigParser()
         config.read('./utils/config.ini')
         self.db = InitData(config)
@@ -31,8 +31,8 @@ class main_window:
         self.login_window = None
 
         # Khi mở chương trình, kiểm tra trạng thái đăng nhập
-        self.check_login()
-        # self.open_main_window()
+        # self.check_login()
+        self.open_main_window()
 
 
         

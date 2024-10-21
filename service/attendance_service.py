@@ -7,30 +7,48 @@ class AttendanceService:
         config.read('./utils/config.ini')
         self.db = InitData(config)
 
-    def insert(self, input):
+    def handle(self, input):
         self.db.connect_database()
         cursor = self.db.connection.cursor()
-        self.db.connection.cursor().execute(f'''
-        INSERT INTO attendance (
-            attendance_id, 
-            employee_id,
-            check_in,
-            check_out,
-            work_date,
-            status,
-            TEXT
-        )
-        VALUES 
-        (
-            {input.attendance_id}, 
-            {input.employee_id},
-            '{input.check_in}',
-            '{input.check_out}',
-            '{input.work_date}',
-            '{input.status}',
-            '{input.TEXT}'
-        )
-        ''')
+
+        query = f"""
+        SELECT * 
+        FROM attendance
+        WHERE employee_id = {input.employee_id} 
+        AND work_date = CURDATE() 
+        AND check_out IS NULL
+        """
+        cursor.execute(query)
+        result = cursor.fetchone()
+        if result:
+        # Nếu có bản ghi check-in mà chưa check-out thì cập nhật lại
+            update_query = f"""
+            UPDATE attendance
+            SET check_out = '{input.check_out}'
+            WHERE employee_id = {input.employee_id} 
+            AND work_date = CURDATE() 
+            AND check_out IS NULL
+            """
+            cursor.execute(update_query)
+        else:
+            # Nếu không tìm thấy bản ghi, thực hiện check-in mới
+            self.db.connection.cursor().execute(f'''
+            INSERT INTO attendance (
+                employee_id,
+                check_in,
+                work_date,
+                status,
+                remarks
+            )
+            VALUES 
+            (
+                 {input.employee_id},
+                '{input.check_in}',
+                '{input.work_date}',
+                '{input.status}',
+                '{input.remarks}'
+            )
+            ''')
 
         self.db.connection.commit()
 
@@ -48,30 +66,7 @@ class AttendanceService:
         self.db.close_connection()
 
         return rows
-    def update(self, data):
-        self.db.connect_database()
 
-        # cursor = self.db.connection.cursor()
-        # self.db.connection.cursor().execute(f'''
-        # UPDATE employee_roles 
-        # SET salary = {data.salary}, 
-        # benefits = N'{data.description}'
-        # WHERE contract_id = {data.contract_id}
-        # ''')
-        # self.db.connection.commit()
-
-        # cursor.close()
-        self.db.close_connection()
-
-    def delete(self, id):
-        self.db.connect_database()
-
-        cursor = self.db.connection.cursor()
-        self.db.connection.cursor().execute(f'DELETE FROM attendance WHERE attendance_id = {id}')
-        self.db.connection.commit()
-        cursor.close()
-
-        self.db.close_connection()
     def getById(self, id):
         self.db.connect_database()
         cursor = self.db.connection.cursor()

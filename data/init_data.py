@@ -100,6 +100,20 @@ class InitData:
                 )
             """
 
+            create_table_license_query = """
+                CREATE TABLE IF NOT EXISTS leave_requests (
+                    request_id INT AUTO_INCREMENT PRIMARY KEY, -- Mã đơn xin nghỉ (ID duy nhất)
+                    employee_id INT NOT NULL,                  -- Mã nhân viên liên kết
+                    reason TEXT NOT NULL,                      -- Lý do xin nghỉ
+                    start_date DATE NOT NULL,                  -- Ngày bắt đầu nghỉ
+                    end_date DATE NOT NULL,                    -- Ngày kết thúc nghỉ
+                    status ENUM('Pending', 'Approved', 'Rejected') DEFAULT 'Pending', -- Trạng thái của đơn
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Ngày tạo đơn
+                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Ngày cập nhật
+                    FOREIGN KEY (employee_id) REFERENCES employees(employee_id) -- Liên kết với bảng nhân viên
+                )
+            """
+
             cursor.execute(create_table_department_query)
             cursor.execute(create_table_position_query)
             cursor.execute(create_table_employee_query)
@@ -107,6 +121,7 @@ class InitData:
             cursor.execute(create_table_attendance_query)
             cursor.execute(create_table_role_query)
             cursor.execute(create_table_employee_role_query)
+            cursor.execute(create_table_license_query)
 
             self.connection.commit()
         except Error as e:
@@ -124,8 +139,14 @@ class InitData:
                 cursor.execute("INSERT INTO departments(department_name, description, location, create_date)VALUES(N'Admin', N'Không', 'HCM',CURDATE())")
                 cursor.execute("INSERT INTO positions (position_name, description, department_id, create_date)VALUES('Admin', 'Admin', 1, CURDATE())")
                 cursor.execute("INSERT INTO employees(name, date_of_birth, gender, address, phone_number, email, position_id, start_date, id_card_number, password, username)VALUES('ADMIN', CURDATE(), 1, 'HCM', '999', 'admin@gmail.com', 1, CURDATE(), '888', '1', 'admin')")
+                cursor.execute("INSERT INTO employees(name, date_of_birth, gender, address, phone_number, email, position_id, start_date, id_card_number, password, username)VALUES('sonnq', CURDATE(), 1, 'HCM', '999', 'sonnq@gmail.com', 1, CURDATE(), '888', '1', 'sonnq')")
+
                 cursor.execute("INSERT INTO roles(role_name, description) VALUES('Admin', N'Toàn quyền truy cập và quản lý hệ thống')")
+                cursor.execute("INSERT INTO roles(role_name, description) VALUES('Manager', N'Quản lý nhân viên và phòng ban và duyệt đơn xin nghỉ')")
+                cursor.execute("INSERT INTO roles(role_name, description) VALUES('User', N'Chấm công, đơn xin nghỉ, xem bảng chấm công')")
                 cursor.execute("INSERT INTO employee_roles(employee_id, role_id)VALUES(1, 1)")
+                cursor.execute("INSERT INTO employee_roles(employee_id, role_id)VALUES(2, 2)")
+                cursor.execute("INSERT INTO employee_roles(employee_id, role_id)VALUES(3, 3)")
 
             self.connection.commit()
         except Error as e:

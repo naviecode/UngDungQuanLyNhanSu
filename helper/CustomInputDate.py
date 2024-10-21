@@ -3,11 +3,10 @@ from tkinter import messagebox
 from tkcalendar import DateEntry
 import datetime
 
-class CustomInputDateGrid:
-    def __init__(self, parent, text, width, selectMode, date_pattern, gridCol, gridRow):
+class CustomInputDate:
+    def __init__(self, parent, text, width, selectMode, date_pattern):
         self.text = text
         self.date_entry = DateEntry(parent, width=width, selectmode='day', date_pattern='dd-mm-y')
-        self.date_entry.grid(row=gridRow, column=gridCol, padx=10, pady=10)
 
     def validate_input(self):
         if self.get_value() == "":
@@ -25,4 +24,6 @@ class CustomInputDateGrid:
         
     def get_value(self):
         return self.date_entry.get_date()
-        
+    
+    def grid(self, row, column, padx=10, pady=10):
+        self.date_entry.grid(row=row, column=column, padx=padx, pady=pady)
