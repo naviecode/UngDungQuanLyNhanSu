@@ -39,7 +39,7 @@ class FormPopup(tk.Toplevel):
         self.button_close = tk.Button(button_frame, text="Đóng", command=self.destroy)
         self.button_close.pack(side="right", padx=5)
 
-        if type is 'View':
+        if type == 'View':
             self.button_save = tk.Button(button_frame, text="Duyệt")
             self.button_save.pack(side="right", padx=5)
         else:
