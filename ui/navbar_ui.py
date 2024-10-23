@@ -51,43 +51,79 @@ class Navbar(tk.Frame):
         self.buttons = []
         self.frames = frames
         
-        button_main = self.CreateButtonNav(nav_main, "Tổng quan", "./images/icons/overview.png",True,lambda: self.change_color(button_main, Overview))
-        button_main.pack()
-        self.buttons.append(button_main)
+        self.button_main = self.CreateButtonNav(nav_main, "Tổng quan", "./images/icons/overview.png",True,lambda: self.change_color(self.button_main, Overview))
+        self.button_main.pack()
+        self.buttons.append(self.button_main)
 
-        button_dep = self.CreateButtonNav(nav_main, "Phòng ban", "./images/icons/department.png",False,lambda: self.change_color(button_dep, Department))
-        button_dep.pack()
-        self.buttons.append(button_dep)
+        self.button_dep = self.CreateButtonNav(nav_main, "Phòng ban", "./images/icons/department.png",False,lambda: self.change_color(self.button_dep, Department))
+        self.button_dep.pack()
+        self.buttons.append(self.button_dep)
 
-        button_position = self.CreateButtonNav(nav_main, "Chức vụ", "./images/icons/position.png",False,lambda: self.change_color(button_position, Position))
-        button_position.pack()
-        self.buttons.append(button_position)
+        self.button_position = self.CreateButtonNav(nav_main, "Chức vụ", "./images/icons/position.png",False,lambda: self.change_color(self.button_position, Position))
+        self.button_position.pack()
+        self.buttons.append(self.button_position)
         
-        button_employee = self.CreateButtonNav(nav_main, "Nhân viên", "./images/icons/user_menu.png",False,lambda: self.change_color(button_employee, Employee))
-        button_employee.pack()
-        self.buttons.append(button_employee)
+        self.button_employee = self.CreateButtonNav(nav_main, "Nhân viên", "./images/icons/user_menu.png",False,lambda: self.change_color(self.button_employee, Employee))
+        self.button_employee.pack()
+        self.buttons.append(self.button_employee)
 
-        button_timesheet = self.CreateButtonNav(nav_main,"Bảng chấm công", "./images/icons/timesheet.png",False,lambda: self.change_color(button_timesheet, Timesheet))
-        button_timesheet.pack()
-        self.buttons.append(button_timesheet)
+        self.button_timesheet = self.CreateButtonNav(nav_main,"Bảng chấm công", "./images/icons/timesheet.png",False,lambda: self.change_color(self.button_timesheet, Timesheet))
+        self.button_timesheet.pack()
+        self.buttons.append(self.button_timesheet)
 
-        button_license = self.CreateButtonNav(nav_main,"Đơn từ", "./images/icons/license.png",False,lambda: self.change_color(button_license, License))
-        button_license.pack()
-        self.buttons.append(button_license)
+        self.button_license = self.CreateButtonNav(nav_main,"Đơn từ", "./images/icons/license.png",False,lambda: self.change_color(self.button_license, License))
+        self.button_license.pack()
+        self.buttons.append(self.button_license)
 
-        button_contract = self.CreateButtonNav(nav_main,"Hợp đồng", "./images/icons/contract.png",False,lambda: self.change_color(button_contract, Contract))
-        button_contract.pack()
-        self.buttons.append(button_contract)
+        self.button_contract = self.CreateButtonNav(nav_main,"Hợp đồng", "./images/icons/contract.png",False,lambda: self.change_color(self.button_contract, Contract))
+        self.button_contract.pack()
+        self.buttons.append(self.button_contract)
 
-        button_employee_role = self.CreateButtonNav(nav_main,"Phân quyền", "./images/icons/role_employee.png",False,lambda: self.change_color(button_employee_role, EmployeeRole))
-        button_employee_role.pack()
-        self.buttons.append(button_employee_role)
+        self.button_employee_role = self.CreateButtonNav(nav_main,"Phân quyền", "./images/icons/role_employee.png",False,lambda: self.change_color(self.button_employee_role, EmployeeRole))
+        self.button_employee_role.pack()
+        self.buttons.append(self.button_employee_role)
 
-        button_role = self.CreateButtonNav(nav_main,"Quyền", "./images/icons/permission.png",False,lambda: self.change_color(button_role, Role))
-        button_role.pack()
-        self.buttons.append(button_role)
+        self.button_role = self.CreateButtonNav(nav_main,"Quyền", "./images/icons/permission.png",False,lambda: self.change_color(self.button_role, Role))
+        self.button_role.pack()
+        self.buttons.append(self.button_role)
 
+        self.set_permission()
 
+    def set_permission(self):
+        if globals.current_user.role_id == 1:
+            """ADMIN"""
+            self.button_main.pack()
+            self.button_dep.pack()
+            self.button_position.pack()
+            self.button_employee.pack()
+            self.button_timesheet.pack()
+            self.button_license.pack()
+            self.button_contract.pack()
+            self.button_employee_role.pack()
+            self.button_role.pack()
+        elif globals.current_user.role_id == 3:
+            """MANAGER"""
+            self.button_main.pack()
+            self.button_dep.pack()
+            self.button_position.pack()
+            self.button_employee.pack()
+            self.button_timesheet.pack()
+            self.button_license.pack()
+            self.button_contract.pack_forget()
+            self.button_employee_role.pack_forget()
+            self.button_role.pack_forget()
+        else:
+            """USER"""
+            self.button_main.pack()
+            self.button_dep.pack_forget()
+            self.button_position.pack_forget()
+            self.button_employee.pack_forget()
+            self.button_timesheet.pack()
+            self.button_license.pack()
+            self.button_contract.pack_forget()
+            self.button_employee_role.pack_forget()
+            self.button_role.pack_forget()
+            
         
     def CreateButtonNav(self, parent, text, image_path,active, command):
         button_image = Image.open(image_path)
@@ -125,9 +161,11 @@ class Navbar(tk.Frame):
 
     def show_page(self, page):
         frame = self.frames[page]
+        frame.show_loading()
         frame.clear_frame_data()
         frame.tkraise()
         frame.on_show_frame()
+        frame.simulate_loading()
 
     def initNav(self, content, parent):
         for F in (Overview, Department, Position, Employee, Contract, Role, Timesheet, License, EmployeeRole):
@@ -148,3 +186,5 @@ class Navbar(tk.Frame):
             )
             self.attendance_service.handle(data)
             messagebox.showinfo("Thông báo", "Xin cảm ơn")
+
+    

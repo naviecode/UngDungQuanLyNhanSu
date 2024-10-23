@@ -57,7 +57,7 @@ class CustomTreeView:
         for data in self.datas:
             self.frame_view.tree.insert('', tk.END, values=data)
         
-        self.parent.after(200, self.get_button_view)
+        self.parent.after(1000, self.get_button_view)
 
         # Tạo nút trước và tiếp theo
         self.button_frame = tk.Frame(self.parent)
@@ -86,9 +86,6 @@ class CustomTreeView:
             self.buttons.append(button_delete)
     
     def next_page(self):
-        print(self.current_page)
-        print(self.items_per_page)
-        print(len(self.datas))
         0 + 1 * 20 < 20
         if (self.current_page + 1) * self.items_per_page < len(self.datas):
             self.current_page += 1
@@ -121,6 +118,7 @@ class CustomTreeView:
         # Cập nhật trạng thái nút
         self.prev_button.config(state=tk.NORMAL if self.current_page > 0 else tk.DISABLED)
         self.next_button.config(state=tk.NORMAL if end < len(self.data_reload) else tk.DISABLED)
+        
     def destroy(self):
         for widget in self.frame_view.tree.winfo_children():
             widget.destroy()

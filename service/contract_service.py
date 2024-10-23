@@ -39,7 +39,7 @@ class ContractService:
         
         cursor.execute("""
         SELECT A.contract_id,         
-        B.name, A.salary, 
+        B.name, CONCAT(FORMAT(A.salary, 0), ' VND'), 
         DATE_FORMAT(A.start_date, '%d/%m/%Y') AS start_date, DATE_FORMAT(A.end_date, '%d/%m/%Y') AS end_date               
         FROM contracts A
         LEFT JOIN employees B on A.employee_id = B.employee_id
