@@ -40,7 +40,6 @@ class LoginScreen:
         result = self.employee_service.getLoginUser(username, password)
         if result is not None:
             globals.current_user = UserModel(result[0],result[1],result[2], result[3])
-
             return True
         else:
             return False

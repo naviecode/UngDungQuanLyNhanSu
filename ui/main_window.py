@@ -10,7 +10,7 @@ import globals
 
 class MainWindow:
     def __init__(self, master):
-        globals.current_user = UserModel(1,"username",1, "username")
+        # globals.current_user = UserModel(1,"username",1, "username")
 
         self.root = master
         self.root.title("Ứng dụng Quản lý Nhân sự")
@@ -30,8 +30,8 @@ class MainWindow:
         self.login_window = None
 
         # Khi mở chương trình, kiểm tra trạng thái đăng nhập
-        # self.check_login()
-        self.open_main_window()
+        self.check_login()
+        # self.open_main_window()
 
 
         
