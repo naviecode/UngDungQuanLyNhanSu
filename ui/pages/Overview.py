@@ -2,10 +2,10 @@ import tkinter as tk
 from tkinter import ttk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.pyplot as plt
-from datetime import datetime
-from ui.pages.BasePage import BasePage
 import pandas as pd
+from datetime import datetime
 import matplotlib.pyplot as plt
+from ui.pages import BasePage
 
 class Overview(BasePage):
     def __init__(self, parent, controller):

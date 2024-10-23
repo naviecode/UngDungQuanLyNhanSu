@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from helper.ButtonImage import ButtonImage
-
+from helper import ButtonImage
 
 class CustomTreeView:
     def __init__(self, frame_view, parent, datas, columns, columnShowBtn):

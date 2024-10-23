@@ -1,4 +1,4 @@
-class attendance_model:
+class AttendanceModel:
     def __init__(self, employee_id, check_in, check_out, work_date, status, remarks):
         self.employee_id = employee_id
         self.check_in = check_in

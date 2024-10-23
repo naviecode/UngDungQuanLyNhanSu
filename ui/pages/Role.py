@@ -1,9 +1,8 @@
 import tkinter as tk
-from helper.CustomTreeView import CustomTreeView
-from ui.pages.BasePage import BasePage
 from tkinter import messagebox
-from service.role_service import RoleService
-from helper.FormPopup import FormPopup
+from service import RoleService
+from ui.pages import BasePage
+from helper import CustomTreeView, FormPopup
 
 class Role(BasePage):
     def __init__(self, parent, controller):

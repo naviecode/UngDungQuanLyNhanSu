@@ -1,9 +1,9 @@
 import tkinter as tk
 from tkinter import messagebox
-from service.employee_service import EmployeeService
 import globals
-from models.user.user_model import User
-from helper.CustomInputText import CustomInputText
+from service import EmployeeService
+from models import UserModel
+from helper import CustomInputText
 
 
 class LoginScreen:
@@ -39,8 +39,7 @@ class LoginScreen:
     def is_login(self, username, password):
         result = self.employee_service.getLoginUser(username, password)
         if result is not None:
-            globals.current_user = User(result[0],result[1],result[2], result[3])
-
+            globals.current_user = UserModel(result[0],result[1],result[2], result[3])
             return True
         else:
             return False

@@ -1,10 +1,8 @@
 import tkinter as tk
-from ui.pages.BasePage import BasePage
-from helper.CustomTreeView import CustomTreeView
-from helper.FormPopup import FormPopup
-from service.contract_service import ContractService
-from service.employee_service import EmployeeService
 from tkinter import messagebox
+from ui.pages import BasePage
+from helper import CustomTreeView, FormPopup
+from service import ContractService, EmployeeService
 
 class Contract(BasePage):
     def __init__(self, parent, controller):

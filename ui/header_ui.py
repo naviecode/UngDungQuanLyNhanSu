@@ -1,8 +1,8 @@
 import tkinter as tk
 from PIL import Image, ImageTk
 from tkinter import messagebox
-from service.employee_service import EmployeeService
-from helper.CustomInputText import CustomInputText
+from service import EmployeeService
+from helper import CustomInputText
 import globals
 
 class Header(tk.Frame):
