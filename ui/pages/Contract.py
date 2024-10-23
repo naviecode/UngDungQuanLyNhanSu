@@ -97,15 +97,15 @@ class Contract(BasePage):
         ]
 
         self.fields = [
-            {'name': 'contract_id', 'type': 'ID', 'label': 'ID' , 'row': 0, 'col1' : 1, 'col2': 2},
+            {'name': 'contract_id', 'type': 'ID', 'label': 'ID' , 'required': False, 'row': 0, 'col1' : 1, 'col2': 2},
 
-            {'name': 'employee_id', 'type': 'ComboboxCustom', 'label': 'Nhân viên' ,'values': self.data_employee, 'row': 0, 'col1' : 0, 'col2': 1},
-            {'name': 'salary', 'type': 'CustomInput', 'label': 'Mức lương', 'row': 0, 'col1' : 2, 'col2': 3},
+            {'name': 'employee_id', 'type': 'ComboboxCustom', 'label': 'Nhân viên' , 'required': True,'values': self.data_employee, 'row': 0, 'col1' : 0, 'col2': 1},
+            {'name': 'salary', 'type': 'CustomInput', 'label': 'Mức lương', 'required': True, 'row': 0, 'col1' : 2, 'col2': 3},
 
-            {'name': 'start_date', 'type': 'CustomDate', 'label': 'Ngày bắt đầu' , 'row': 1, 'col1' : 0, 'col2': 1},
-            {'name': 'end_date', 'type': 'CustomDate', 'label': 'Ngày kết thúc', 'row': 1, 'col1' : 2, 'col2': 3},
+            {'name': 'start_date', 'type': 'CustomDate', 'label': 'Ngày bắt đầu' , 'required': True, 'row': 1, 'col1' : 0, 'col2': 1},
+            {'name': 'end_date', 'type': 'CustomDate', 'label': 'Ngày kết thúc', 'required': True, 'row': 1, 'col1' : 2, 'col2': 3},
 
-            {'name': 'benefits', 'type': 'CustomInput', 'label': 'Đặc quyền(nếu có)', 'row': 2, 'col1' : 0, 'col2': 1}
+            {'name': 'benefits', 'type': 'CustomInput', 'label': 'Đặc quyền(nếu có)', 'required': True, 'row': 2, 'col1' : 0, 'col2': 1}
         ]
 
         self.fram_view = tk.Frame(self)

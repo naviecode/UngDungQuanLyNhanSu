@@ -9,6 +9,7 @@ import configparser
 from tkinter import messagebox
 import globals
 
+
 class main_window:
     def __init__(self, master):
         globals.current_user = User(1,"username",1, "username")
@@ -31,8 +32,8 @@ class main_window:
         self.login_window = None
 
         # Khi mở chương trình, kiểm tra trạng thái đăng nhập
-        self.check_login()
-        # self.open_main_window()
+        # self.check_login()
+        self.open_main_window()
 
 
         
@@ -83,6 +84,16 @@ class main_window:
 
     def exit(self):
         self.root.destroy()
+
+    # def show_loading(self):
+    #     # Hiển thị popup loading
+    #     self.loading_popup = LoadingPopup(self)
+    #     # Gọi quá trình load dữ liệu trong một thread khác
+    #     threading.Thread(target=self.simulate_loading).start()
+
+    # def simulate_loading(self):
+    #     # Sau khi hoàn tất, đóng popup
+    #     self.loading_popup.complete_loading()
 
     
 

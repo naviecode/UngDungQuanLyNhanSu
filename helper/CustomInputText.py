@@ -2,13 +2,17 @@ import tkinter as tk
 from tkinter import messagebox
 
 class CustomInputText:
-    def __init__(self, parent, text, width = None, show = None):
+    def __init__(self, parent, text, width = None, show = None, required = False):
         self.text = text
         self.entry_input = tk.Entry(parent, width=width, show=show)
+        self.novalidate = True
+        if(required):
+            self.novalidate = False
 
 
     def validate_input(self):
-        # Nếu chuỗi rỗng thì báo lỗi
+        if(self.novalidate):
+            return True
         if self.entry_input.get() == "":
             messagebox.showerror("Lỗi nhập liệu", f"Không được để trống {self.text}")
             return False

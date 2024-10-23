@@ -76,15 +76,15 @@ class FormPopup(tk.Toplevel):
                 combobox.grid(row=field['row'], column=field['col2'], padx=10, pady=5)
                 self.field_widgets[field['name']] = combobox
             elif field_type == "CustomInput":
-                entry = CustomInputText(self, field['label'], 30)
+                entry = CustomInputText(self, field['label'], 30, required=field['required'])
                 entry.grid(row=field['row'], column=field['col2'], padx=10, pady=10)
                 self.field_widgets[field['name']] = entry
             elif field_type == "ComboboxCustom":
-                comboboxcustom = CustomCombobox(parent = self, text=field['label'], dataArray= field.get('values', []), width=30-4)
+                comboboxcustom = CustomCombobox(parent = self, text=field['label'], dataArray= field.get('values', []), width=30-4 , required=field['required'])
                 comboboxcustom.grid(row=field['row'], column=field['col2'], padx=10, pady=10)
                 self.field_widgets[field['name']] = comboboxcustom
             elif field_type == "CustomDate":
-                date_entry = CustomInputDate(self, field['label'], 30-4, "", "")
+                date_entry = CustomInputDate(self, field['label'], 30-4, "", "", required=field['required'])
                 date_entry.grid(row=field['row'], column=field['col2'], padx=10, pady=10)
                 self.field_widgets[field['name']] = date_entry
                 

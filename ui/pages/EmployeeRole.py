@@ -89,9 +89,9 @@ class EmployeeRole(BasePage):
             ]
         
         self.fields = [
-            {'name': 'employee_role_id', 'type': 'ID', 'label': 'ID' , 'row': 0, 'col1' : 1, 'col2': 2},
-            {'name': 'employee_id', 'type': 'ComboboxCustom', 'label': 'Tên nhân viên','values': self.data_employee, 'row': 0, 'col1' : 0, 'col2': 1},
-            {'name': 'role_id', 'type': 'ComboboxCustom', 'label': 'Tên quyền','values': self.data_role, 'row': 0, 'col1' : 2, 'col2': 3}
+            {'name': 'employee_role_id', 'type': 'ID', 'label': 'ID' , 'required': False, 'row': 0, 'col1' : 1, 'col2': 2},
+            {'name': 'employee_id', 'type': 'ComboboxCustom', 'label': 'Tên nhân viên', 'required': True, 'values': self.data_employee, 'row': 0, 'col1' : 0, 'col2': 1},
+            {'name': 'role_id', 'type': 'ComboboxCustom', 'label': 'Tên quyền', 'required': True,'values': self.data_role, 'row': 0, 'col1' : 2, 'col2': 3}
         ]
 
         self.fram_view = tk.Frame(self)

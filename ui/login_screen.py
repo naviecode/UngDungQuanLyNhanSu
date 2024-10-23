@@ -55,8 +55,8 @@ class LoginScreen:
 
         if self.is_login(username, password):
             messagebox.showinfo("Thành công", "Đăng nhập thành công!")
-            self.master.destroy()  # Đóng cửa sổ đăng nhập
-            self.main_app.open_main_window()  # Gọi cửa sổ chính từ main_app
+            self.master.destroy() 
+            self.main_app.open_main_window() 
         else:
             messagebox.showerror("Thất bại", "Tên đăng nhập hoặc mật khẩu không đúng!")
     

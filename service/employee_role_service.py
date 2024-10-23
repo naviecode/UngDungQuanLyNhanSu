@@ -10,6 +10,7 @@ class EmployeeRoleService:
     def insert(self, input):
         self.db.connect_database()
         cursor = self.db.connection.cursor()
+        print(input)
         self.db.connection.cursor().execute(f'''
         INSERT INTO employee_roles (
             employee_id, 

@@ -98,12 +98,12 @@ class Position(BasePage):
         ]
 
         self.fields = [
-            {'name': 'position_id', 'type': 'ID', 'label': 'ID' , 'row': 0, 'col1' : 1, 'col2': 2},
+            {'name': 'position_id', 'type': 'ID', 'label': 'ID' , 'required': False, 'row': 0, 'col1' : 1, 'col2': 2},
 
-            {'name': 'position_name', 'type': 'CustomInput', 'label': 'Tên chức vụ' , 'row': 0, 'col1' : 0, 'col2': 1},
-            {'name': 'description', 'type': 'CustomInput', 'label': 'Mô tả', 'row': 0, 'col1' : 2, 'col2': 3},
+            {'name': 'position_name', 'type': 'CustomInput', 'label': 'Tên chức vụ' , 'required': True, 'row': 0, 'col1' : 0, 'col2': 1},
+            {'name': 'description', 'type': 'CustomInput', 'label': 'Mô tả', 'row': 0, 'required': False, 'col1' : 2, 'col2': 3},
 
-            {'name': 'department_id', 'type': 'ComboboxCustom', 'label': 'Phòng ban', 'values': self.data_department, 'row': 1, 'col1' : 0, 'col2': 1}
+            {'name': 'department_id', 'type': 'ComboboxCustom', 'label': 'Phòng ban', 'required': True, 'values': self.data_department, 'row': 1, 'col1' : 0, 'col2': 1}
         ]
 
         self.fram_view = tk.Frame(self)
