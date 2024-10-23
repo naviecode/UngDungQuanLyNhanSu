@@ -3,7 +3,7 @@ from tkinter import ttk
 from PIL import Image, ImageTk
 import calendar
 from datetime import datetime
-from ui.pages.BasePage import BasePage
+from ui.pages import BasePage
 
 class Timesheet(BasePage):
     def __init__(self, parent, controller):

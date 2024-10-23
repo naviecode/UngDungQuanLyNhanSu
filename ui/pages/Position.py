@@ -1,11 +1,9 @@
 import tkinter as tk
-from tkinter import ttk
-from helper.CustomTreeView import CustomTreeView
-from ui.pages.BasePage import BasePage
 from tkinter import messagebox
-from service.position_service import PositionService
-from service.department_service import DepartMentService
-from helper.FormPopup import FormPopup
+from helper import CustomTreeView,FormPopup
+from ui.pages import BasePage
+from service import PositionService, DepartMentService
+
 
 class Position(BasePage):
     def __init__(self, parent, controller):

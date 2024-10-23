@@ -1,10 +1,8 @@
 import tkinter as tk
-from helper.CustomTreeView import CustomTreeView
-from ui.pages.BasePage import BasePage
 from tkinter import messagebox
-from service.department_service import DepartMentService
-from service.employee_service import EmployeeService
-from helper.FormPopup import FormPopup
+from helper import CustomTreeView, FormPopup
+from ui.pages import BasePage
+from service import DepartMentService, EmployeeService
 
 
 
