@@ -39,7 +39,7 @@ class FormPopup(tk.Toplevel):
         self.button_close = tk.Button(button_frame, text="Đóng", command=self.destroy)
         self.button_close.pack(side="right", padx=5)
 
-        if type is 'View':
+        if type == 'View':
             self.button_save = tk.Button(button_frame, text="Duyệt")
             self.button_save.pack(side="right", padx=5)
         else:
@@ -76,15 +76,15 @@ class FormPopup(tk.Toplevel):
                 combobox.grid(row=field['row'], column=field['col2'], padx=10, pady=5)
                 self.field_widgets[field['name']] = combobox
             elif field_type == "CustomInput":
-                entry = CustomInputText(self, field['label'], 30)
+                entry = CustomInputText(self, field['label'], 30, required=field['required'])
                 entry.grid(row=field['row'], column=field['col2'], padx=10, pady=10)
                 self.field_widgets[field['name']] = entry
             elif field_type == "ComboboxCustom":
-                comboboxcustom = CustomCombobox(parent = self, text=field['label'], dataArray= field.get('values', []), width=30-4)
+                comboboxcustom = CustomCombobox(parent = self, text=field['label'], dataArray= field.get('values', []), width=30-4 , required=field['required'])
                 comboboxcustom.grid(row=field['row'], column=field['col2'], padx=10, pady=10)
                 self.field_widgets[field['name']] = comboboxcustom
             elif field_type == "CustomDate":
-                date_entry = CustomInputDate(self, field['label'], 30-4, "", "")
+                date_entry = CustomInputDate(self, field['label'], 30-4, "", "", required=field['required'])
                 date_entry.grid(row=field['row'], column=field['col2'], padx=10, pady=10)
                 self.field_widgets[field['name']] = date_entry
                 

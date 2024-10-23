@@ -3,6 +3,7 @@ from ui.pages.BasePage import BasePage
 from service.employee_service import EmployeeService
 from service.position_service import PositionService
 from service.contract_service import ContractService
+from service.employee_role_service import EmployeeRoleService
 from tkinter import messagebox
 from helper.CustomTreeView import CustomTreeView
 from helper.FormPopup import FormPopup
@@ -16,6 +17,8 @@ class Employee(BasePage):
         self.contract_service = ContractService()
         self.position_service = PositionService()
         self.employee_service = EmployeeService()
+        self.employee_role_service = EmployeeRoleService()
+        self.set_permission()
         self.on_show_frame()
         
 
@@ -35,26 +38,32 @@ class Employee(BasePage):
     def insert(self, data):
         confirm = messagebox.askyesno("Xác nhận thêm mới", "Bạn có chắc chắn muốn thêm mới ?")
         if confirm:
+            self.show_loading()
             result = self.employee_service.insert(data)
             self.treeView.loadData()
             return True
+        self.simulate_loading()
         return False
 
     
     def update(self, data):
         confirm = messagebox.askyesno("Xác nhận cập nhập", "Bạn có chắc chắn muốn cập nhập ?")
         if confirm:
+            self.show_loading()
             result = self.employee_service.update(data)
             self.treeView.loadData()
             return True
+        self.simulate_loading()
         return False
     
     def delete(self, row_id):
         confirm = messagebox.askyesno("Xác nhận xóa", "Bạn có chắc chắn muốn xóa nhân viên này?")
         if confirm:
+            self.show_loading()
             result = self.employee_service.delete(row_id)
             self.treeView.loadData()
             return True
+        self.simulate_loading()
         return False
     def on_show_frame(self):
         self.label = tk.Label(self, text="QUẢN LÝ NHÂN SỰ", font=("Helvetica", 16))
@@ -92,6 +101,12 @@ class Employee(BasePage):
                 'anchor': 'center'
             },
             {
+                'key': 'Department',
+                'name': 'Phòng ban',
+                'width': 80,
+                'anchor': 'center'
+            },
+            {
                 'key': 'StartDate',
                 'name': 'Ngày bắt đầu',
                 'width': 80,
@@ -112,22 +127,22 @@ class Employee(BasePage):
         ]
 
         self.fields = [
-            {'name': 'employee_id', 'type': 'ID', 'label': 'ID' , 'row': 0, 'col1' : 1, 'col2': 2},
+            {'name': 'employee_id', 'type': 'ID', 'label': 'ID' , 'required': False, 'row': 0, 'col1' : 1, 'col2': 2},
 
-            {'name': 'name', 'type': 'CustomInput', 'label': 'Họ và tên' , 'row': 0, 'col1' : 0, 'col2': 1},
-            {'name': 'date_of_birth', 'type': 'CustomDate', 'label': 'Ngày sinh', 'row': 0, 'col1' : 2, 'col2': 3},
+            {'name': 'name', 'type': 'CustomInput', 'label': 'Họ và tên' , 'required': True, 'row': 0, 'col1' : 0, 'col2': 1},
+            {'name': 'date_of_birth', 'type': 'CustomDate', 'label': 'Ngày sinh', 'required': False, 'row': 0, 'col1' : 2, 'col2': 3},
 
-            {'name': 'gender', 'type': 'ComboboxCustom', 'label': 'Giới tính', 'values': [(1, 'Nam'), (0, 'Nữ')], 'row': 1, 'col1' : 0, 'col2': 1},
-            {'name': 'address', 'type': 'CustomInput', 'label': 'Địa chỉ' , 'row': 1, 'col1' : 2, 'col2': 3},
+            {'name': 'gender', 'type': 'ComboboxCustom', 'label': 'Giới tính', 'required': True, 'values': [(1, 'Nam'), (0, 'Nữ')], 'row': 1, 'col1' : 0, 'col2': 1},
+            {'name': 'address', 'type': 'CustomInput', 'label': 'Địa chỉ' , 'required': False, 'row': 1, 'col1' : 2, 'col2': 3},
 
-            {'name': 'phone_number', 'type': 'CustomInput', 'label': 'Số điện thoại' , 'row': 2, 'col1' : 0, 'col2': 1},
-            {'name': 'email', 'type': 'CustomInput', 'label': 'Email' , 'row': 2, 'col1' : 2, 'col2': 3},
+            {'name': 'phone_number', 'type': 'CustomInput', 'label': 'Số điện thoại' , 'required': True, 'row': 2, 'col1' : 0, 'col2': 1},
+            {'name': 'email', 'type': 'CustomInput', 'label': 'Email' , 'required': False, 'row': 2, 'col1' : 2, 'col2': 3},
 
-            {'name': 'position_id', 'type': 'ComboboxCustom', 'label': 'Vị trí', 'values': self.data_position, 'row': 3, 'col1' : 0, 'col2': 1},
-            {'name': 'start_date', 'type': 'CustomDate', 'label': 'Ngày bắt đầu', 'row': 3, 'col1' : 2, 'col2': 3},
+            {'name': 'position_id', 'type': 'ComboboxCustom', 'label': 'Vị trí', 'required': True, 'values': self.data_position, 'row': 3, 'col1' : 0, 'col2': 1},
+            {'name': 'start_date', 'type': 'CustomDate', 'label': 'Ngày bắt đầu', 'required': True, 'row': 3, 'col1' : 2, 'col2': 3},
 
-            {'name': 'id_card_number', 'type': 'CustomInput', 'label': 'CCCD/CMND' , 'row': 4, 'col1' : 0, 'col2': 1},
-            {'name': 'username', 'type': 'CustomInput', 'label': 'Tên đăng nhập' , 'row': 4, 'col1' : 2, 'col2': 3},
+            {'name': 'id_card_number', 'type': 'CustomInput', 'label': 'CCCD/CMND' , 'required': True, 'row': 4, 'col1' : 0, 'col2': 1},
+            {'name': 'username', 'type': 'CustomInput', 'label': 'Tên đăng nhập' , 'required': True, 'row': 4, 'col1' : 2, 'col2': 3},
         ]
 
         #Get view

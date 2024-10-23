@@ -3,7 +3,7 @@ from tkinter import ttk
 from tkinter import messagebox
 
 class CustomCombobox:
-    def __init__(self, parent, text, dataArray, width):
+    def __init__(self, parent, text, dataArray, width, required = False):
         self.selected_id = None
         self.datas = dataArray
         self.text = text
@@ -11,8 +11,14 @@ class CustomCombobox:
         self.combobox['values'] = [f"{pos[1]}" for pos in dataArray]
         self.combobox.set('')
         self.combobox.bind("<<ComboboxSelected>>", self.on_selected)
+        self.novalidate = True
+        if(required):
+            self.novalidate = False
+
 
     def validate_input(self):
+        if(self.novalidate):
+            return True
         if self.combobox.get() == "":
             messagebox.showerror("Lỗi nhập liệu", f"Vui lòng chọn giá trị cho {self.text}")
             return False

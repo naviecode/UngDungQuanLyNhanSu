@@ -57,9 +57,13 @@ class EmployeeService:
                 ELSE 'Unknown'
             END genderName,
             B.position_name,
-            DATE_FORMAT(A.start_date, '%d/%m/%Y') AS start_date
+            C.department_name,
+            DATE_FORMAT(A.start_date, '%d/%m/%Y') AS start_date,
+            DATE_FORMAT(D.end_date, '%d/%m/%Y') AS end_date
             FROM employees A
             LEFT JOIN positions B ON A.position_id = B.position_id
+            LEFT JOIN departments C ON B.department_id = C.department_id
+            LEFT JOIN contracts D ON A.employee_id = D.employee_id  
         ''')
         rows = cursor.fetchall()
 
@@ -133,14 +137,21 @@ class EmployeeService:
 
         return cursor.rowcount
 
-    def getCombox(self):
+    def getCombox(self, filters = None):
         self.db.connect_database()
         cursor = self.db.connection.cursor()
-        
-        cursor.execute('''
-            SELECT employee_id, name
-            FROM employees 
-        ''')
+        if filters is None:
+            cursor.execute('''
+                SELECT employee_id, name
+                FROM employees 
+            ''')
+        else:
+            cursor.execute(f'''
+                SELECT employee_id, name
+                FROM employees 
+                WHERE employee_id = {filters['employee_id']}
+            ''')
+
         rows = cursor.fetchall()
 
         cursor.close()

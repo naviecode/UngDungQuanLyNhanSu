@@ -33,6 +33,9 @@ class ButtonImage:
     def pack(self, **kwargs):
         self.frame.pack(**kwargs)
 
+    def pack_forget(self, **kwargs):
+        self.frame.pack_forget(**kwargs)
+
     def grid(self, **kwargs):
         self.frame.grid(**kwargs)
 

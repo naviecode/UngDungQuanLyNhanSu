@@ -2,11 +2,17 @@ import tkinter as tk
 from tkinter import ttk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.pyplot as plt
+from datetime import datetime
+from ui.pages.BasePage import BasePage
+import pandas as pd
+import matplotlib.pyplot as plt
 
-class Overview(tk.Frame):
+class Overview(BasePage):
     def __init__(self, parent, controller):
         super().__init__(parent)
         self.controller = controller
+        self.set_permission(btn_add_show=False, btn_export_show=False)
+
     def create_pie_char(self, frame, hover_label):
         departments = ['Phòng Kỹ Thuật', 'Phòng Kế Toán', 'Phòng Nhân Sự', 'Phòng IT', 'Phòng Marketing']
         employee_counts = [30, 20, 25, 15, 10]
@@ -62,15 +68,46 @@ class Overview(tk.Frame):
         chart = FigureCanvasTkAgg(fig, master=frame)
         chart.draw()
         chart.get_tk_widget().pack(fill=tk.BOTH, expand=True)
+    
+    def create_bar_char_employee(self):
+        # Dữ liệu mẫu: Ngày và số phút đi trễ của một nhân viên trong 1 tháng
+        data = {
+            'date': pd.date_range(start='2023-09-01', end='2023-09-30'),
+            'late_minutes': [5, 0, 10, 3, 8, 0, 12, 4, 6, 9, 0, 7, 5, 3, 0, 0, 15, 4, 6, 10, 8, 7, 0, 12, 3, 6, 4, 0, 9, 10]
+        }
+
+        # Tạo DataFrame từ dữ liệu
+        df = pd.DataFrame(data)
+
+        # Vẽ biểu đồ cột (bar chart)
+        plt.figure(figsize=(10, 6))
+        plt.bar(df['date'], df['late_minutes'], color='skyblue')
+
+        # Thêm tiêu đề và nhãn
+        plt.title('Số phút đi trễ trung bình của nhân viên mỗi ngày trong tháng', fontsize=16)
+        plt.xlabel('Ngày', fontsize=12)
+        plt.ylabel('Số phút đi trễ', fontsize=12)
+
+        # Hiển thị giá trị trên từng cột
+        for i, txt in enumerate(df['late_minutes']):
+            plt.text(df['date'][i], df['late_minutes'][i] + 0.5, str(txt), ha='center')
+
+        # Xoay nhãn ngày để dễ đọc
+        plt.xticks(rotation=45)
+
+        # Hiển thị biểu đồ
+        plt.tight_layout()
+        plt.show()
 
     def on_show_frame(self):
         self.frame_1 = tk.Frame(self , height=20)
         self.frame_1.pack(padx=10, pady=10,fill="x")
-
+        nowTime = datetime.now()
+        formatted_time = nowTime.strftime("%A, %d %B %Y")
         label = tk.Label(self.frame_1, text="Chào mừng trở lại, Quang Sơn", font=("Helvetica", 16))
         label.pack(anchor="w")
         
-        label_2 = tk.Label(self.frame_1, text="Hôm này là Monday, 27 April 2020", font=("Helvetica", 11))
+        label_2 = tk.Label(self.frame_1, text=f"Hôm này là {formatted_time}", font=("Helvetica", 11))
         label_2.pack(anchor="w")
         
         self.frame_2 = tk.Frame(self , bg="#f0f0f0", height=220)
@@ -98,5 +135,8 @@ class Overview(tk.Frame):
 
     def clear_frame_data(self):
         for widget in self.winfo_children():
-            widget.pack_forget()
+            if getattr(widget, '_from_base', False):  # Kiểm tra widget có thuộc BasePage hay không
+                """"""
+            else:
+                widget.pack_forget()
     

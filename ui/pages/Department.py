@@ -106,13 +106,13 @@ class Department(BasePage):
         ]
 
         self.fields = [
-            {'name': 'department_id', 'type': 'ID', 'label': 'ID' , 'row': 0, 'col1' : 1, 'col2': 2},
+            {'name': 'department_id', 'type': 'ID', 'label': 'ID' , 'required': False, 'row': 0, 'col1' : 1, 'col2': 2},
 
-            {'name': 'department_name', 'type': 'CustomInput', 'label': 'Tên phòng ban' , 'row': 0, 'col1' : 0, 'col2': 1},
-            {'name': 'location', 'type': 'CustomInput', 'label': 'Địa điểm', 'row': 0, 'col1' : 2, 'col2': 3},
+            {'name': 'department_name', 'type': 'CustomInput', 'label': 'Tên phòng ban' , 'required': True, 'row': 0, 'col1' : 0, 'col2': 1},
+            {'name': 'location', 'type': 'CustomInput', 'label': 'Địa điểm', 'row': 0, 'required': False, 'col1' : 2, 'col2': 3},
 
-            {'name': 'description', 'type': 'CustomInput', 'label': 'Mô tả', 'row': 1, 'col1' : 0, 'col2': 1},
-            {'name': 'manager_id', 'type': 'ComboboxCustom', 'label': 'Người quản lý', 'values': self.data_employee , 'row': 1, 'col1' : 2, 'col2': 3},
+            {'name': 'description', 'type': 'CustomInput', 'label': 'Mô tả', 'required': False, 'row': 1, 'col1' : 0, 'col2': 1},
+            {'name': 'manager_id', 'type': 'ComboboxCustom', 'label': 'Người quản lý', 'required': True, 'values': self.data_employee , 'row': 1, 'col1' : 2, 'col2': 3},
         ]
 
 
