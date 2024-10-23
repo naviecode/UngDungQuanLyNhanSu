@@ -1,23 +1,18 @@
 import tkinter as tk
-from ui.pages.BasePage import BasePage
-from service.employee_service import EmployeeService
-from service.position_service import PositionService
-from service.contract_service import ContractService
-from service.employee_role_service import EmployeeRoleService
 from tkinter import messagebox
-from helper.CustomTreeView import CustomTreeView
-from helper.FormPopup import FormPopup
-from tkinter import ttk
+from ui.pages import BasePage
+from service import EmployeeService, PositionService
+from helper import CustomTreeView, FormPopup
+
+
 
 
 class Employee(BasePage):
     def __init__(self, parent, controller):
         super().__init__(parent)
         self.controller = controller
-        self.contract_service = ContractService()
         self.position_service = PositionService()
         self.employee_service = EmployeeService()
-        self.employee_role_service = EmployeeRoleService()
         self.set_permission()
         self.on_show_frame()
         

@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
 from tkcalendar import DateEntry
-import datetime
 
 class CustomInputDate:
     def __init__(self, parent, text, width, selectMode, date_pattern , required = False):

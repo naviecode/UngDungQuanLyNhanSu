@@ -1,8 +1,6 @@
 import tkinter as tk
-from helper.ButtonImage import ButtonImage
-from helper.LoadingPopup import LoadingPopup
 import threading
-import time
+from helper import ButtonImage, LoadingPopup
 
 class BasePage(tk.Frame):
     def __init__(self, parent):

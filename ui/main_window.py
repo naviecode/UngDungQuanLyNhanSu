@@ -1,18 +1,16 @@
 import tkinter as tk
-from ui.header_ui import Header
-from ui.navbar_ui import Navbar
-from ui.pages.Overview import Overview
-from ui.login_screen import LoginScreen
-from models.user.user_model import User
-from data.init_data import InitData
 import configparser
 from tkinter import messagebox
+from ui import Header, LoginScreen, Navbar
+from ui.pages import Overview
+from models import UserModel
+from data import InitData
 import globals
 
 
-class main_window:
+class MainWindow:
     def __init__(self, master):
-        globals.current_user = User(1,"username",1, "username")
+        globals.current_user = UserModel(1,"username",1, "username")
 
         self.root = master
         self.root.title("Ứng dụng Quản lý Nhân sự")
@@ -84,16 +82,6 @@ class main_window:
 
     def exit(self):
         self.root.destroy()
-
-    # def show_loading(self):
-    #     # Hiển thị popup loading
-    #     self.loading_popup = LoadingPopup(self)
-    #     # Gọi quá trình load dữ liệu trong một thread khác
-    #     threading.Thread(target=self.simulate_loading).start()
-
-    # def simulate_loading(self):
-    #     # Sau khi hoàn tất, đóng popup
-    #     self.loading_popup.complete_loading()
 
     
 

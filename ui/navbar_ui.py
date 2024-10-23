@@ -2,17 +2,9 @@ import tkinter as tk
 from PIL import Image, ImageTk
 from tkinter import messagebox
 from datetime import datetime
-from models.attendance.attendance_model import attendance_model
-from service.attendance_service import AttendanceService
-from ui.pages.Overview import Overview
-from ui.pages.Employee import Employee
-from ui.pages.Contract import Contract
-from ui.pages.License import License
-from ui.pages.Role import Role
-from ui.pages.Timesheet import Timesheet
-from ui.pages.Department import Department
-from ui.pages.Position import Position
-from ui.pages.EmployeeRole import EmployeeRole
+from models import AttendanceModel
+from service import AttendanceService
+from ui.pages import Overview, Employee, Contract, License, Role, Timesheet, Department, Position, EmployeeRole
 import globals
 
 
@@ -176,7 +168,7 @@ class Navbar(tk.Frame):
     def attendance(self):
         response = messagebox.askyesno("Chấm công", "Bạn có muốn thực hiện chấm công?")
         if response:
-            data = attendance_model(
+            data = AttendanceModel(
                 employee_id=globals.current_user.employee_id,
                 check_in = datetime.now(),
                 check_out = datetime.now(),

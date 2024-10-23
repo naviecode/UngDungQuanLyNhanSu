@@ -1,10 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
 from tkcalendar import DateEntry
-from helper.CustomCombobox import CustomCombobox
-from helper.CustomInputText import CustomInputText
-from helper.CustomInputDate import CustomInputDate
 import time
+from helper import CustomCombobox, CustomInputText, CustomInputDate
 
 class FormPopup(tk.Toplevel):
     def __init__(self, parent, title, form_fields ,type = None, form_data=None, width = 640, height = 300):

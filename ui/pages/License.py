@@ -1,10 +1,8 @@
 import tkinter as tk
-from ui.pages.BasePage import BasePage
-from service.license_service import LicenseService
-from helper.CustomTreeView import CustomTreeView
-from service.employee_service import EmployeeService
-from helper.FormPopup import FormPopup
 from tkinter import messagebox
+from ui.pages import BasePage
+from service import LicenseService, EmployeeService
+from helper import FormPopup, CustomTreeView
 import globals
 
 class License(BasePage):
