@@ -66,7 +66,7 @@ class InitData:
                     employee_id INT NOT NULL,                       
                     start_date DATE NOT NULL,                      
                     end_date DATE,                                  
-                    salary DECIMAL(10, 2) NOT NULL,                 
+                    salary DECIMAL(18, 0) NOT NULL,                 
                     benefits TEXT,                                    
                     check_in_time TIME NOT NULL,                             
                     check_out_time TIME NOT NULL                             

@@ -30,5 +30,11 @@ class CustomInputDate:
     def get_value(self):
         return self.date_entry.get_date()
     
-    def grid(self, row, column, padx=10, pady=10):
-        self.date_entry.grid(row=row, column=column, padx=padx, pady=pady)
+    # def grid(self, row, column, padx=10, pady=10):
+    #     self.date_entry.grid(row=row, column=column, padx=padx, pady=pady)
+
+    def grid(self, **kwargs):
+        self.date_entry.grid(**kwargs)
+
+    def pack(self, **kwargs):
+        self.date_entry.pack(**kwargs)

@@ -74,6 +74,8 @@ class EmployeeService:
     def update(self, data):
         self.db.connect_database()
 
+        print(data)
+
         cursor = self.db.connection.cursor()
         self.db.connection.cursor().execute(f'''
         UPDATE employees 
@@ -85,7 +87,7 @@ class EmployeeService:
         email = '{data["email"]}', 
         position_id = {data["position_id"]}, 
         start_date = '{data["start_date"]}', 
-        id_card_number = {data["id_card_number"]},
+        id_card_number = '{data["id_card_number"]}',
         username = '{data["username"]}'
         WHERE employee_id = {data["employee_id"]}
         ''')
