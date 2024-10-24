@@ -31,8 +31,8 @@ class main_window:
         self.login_window = None
 
         # Khi mở chương trình, kiểm tra trạng thái đăng nhập
-        self.check_login()
-        # self.open_main_window()
+        #self.check_login()
+        self.open_main_window()
 
 
         
