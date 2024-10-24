@@ -1,32 +1,36 @@
 import tkinter as tk
+from PIL import Image, ImageTk
 
 
 class LoadingPopup(tk.Toplevel):
     def __init__(self, parent):
         super().__init__(parent)
-        self.title("Loading")
+        self.parent = parent
+        self.overrideredirect(True)
 
-        window_width = 300
-        window_height = 150
-        screen_width = parent.winfo_screenwidth()
-        screen_height = parent.winfo_screenheight()
+        self.img = Image.open("./images/loading/loading_2.gif")
+        self.frames = [ImageTk.PhotoImage(self.img.copy())] 
 
-        #Căn giữa popup
-        x_cordinate = int((screen_width/2) - (window_width/2))
-        y_cordinate = int((screen_height/2) - (window_height/2))
+        try:
+            while True:
+                self.img.seek(self.img.tell() + 1)  # Chuyển frame
+                self.frames.append(ImageTk.PhotoImage(self.img.copy()))
+        except EOFError:
+            pass
 
-        self.geometry(f"{window_width}x{window_height}+{x_cordinate}+{y_cordinate}")
+        self.label = tk.Label(self, image=self.frames[0], borderwidth=0, highlightthickness=0)
+        self.label.pack()
+        self.frame_index = 0
+        self.after(100, self.animate_loading)
 
-        # self.geometry("300x150")
-        self.label = tk.Label(self, text="Loading... Please wait", font=("Helvetica", 14))
-        self.label.pack(pady=30)
+        self.center_window()
 
-        # Cấu hình chế độ modal
-        self.transient(parent)  # Đảm bảo popup nằm trên cửa sổ chính
-        self.grab_set()  # Chặn tất cả các sự kiện từ cửa sổ khác
         
-        # Sử dụng after để kiểm tra việc hoàn thành của thread
-        self.check_thread_completion()
+
+    def animate_loading(self):
+        self.frame_index = (self.frame_index + 1) % len(self.frames)
+        self.label.config(image=self.frames[self.frame_index])
+        self.after(100, self.animate_loading)  # Cập nhật mỗi 100ms
 
     def complete_loading(self):
         # Đóng popup khi quá trình loading hoàn tất
@@ -39,3 +43,19 @@ class LoadingPopup(tk.Toplevel):
         else:
             # Tiếp tục kiểm tra sau 100ms
             self.after(100, self.check_thread_completion)
+
+    def center_window(self):
+        self.update_idletasks()
+        window_width = 300
+        window_height = 150
+        screen_width = self.winfo_screenwidth()
+        screen_height = self.winfo_screenheight()
+        x_cordinate = int((screen_width/2) - (window_width/2))
+        y_cordinate = int((screen_height/2) - (window_height/2))
+
+        self.geometry(f"{window_width}x{window_height}+{x_cordinate}+{y_cordinate}")
+        self.transient(self.parent)  # Đảm bảo popup nằm trên cửa sổ chính
+        self.grab_set()  # Chặn tất cả các sự kiện từ cửa sổ khác
+        
+        # Sử dụng after để kiểm tra việc hoàn thành của thread
+        self.check_thread_completion()

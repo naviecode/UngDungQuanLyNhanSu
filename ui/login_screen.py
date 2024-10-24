@@ -14,6 +14,7 @@ class LoginScreen:
         x = (main_app.screen_width //2) - (350//2)
         y = (main_app.screen_height //2) - (200//2)
         self.master.geometry(f'{350}x{200}+{x}+{y}')
+        self.master.iconbitmap('./images/icons/screen_login.ico')
 
         self.master.title("Đăng nhập nhân viên")
         # Label và Entry cho tên người dùng

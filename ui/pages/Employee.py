@@ -13,8 +13,8 @@ class Employee(BasePage):
         self.controller = controller
         self.position_service = PositionService()
         self.employee_service = EmployeeService()
-        self.set_permission()
-        # self.on_show_frame()
+        self.set_permission_button(btn_add_show=True, btn_export_show=False)
+
         
 
     def search(self):
@@ -130,7 +130,7 @@ class Employee(BasePage):
             {'name': 'gender', 'type': 'ComboboxCustom', 'label': 'Giới tính', 'required': True, 'values': [(1, 'Nam'), (0, 'Nữ')], 'row': 1, 'col1' : 0, 'col2': 1},
             {'name': 'address', 'type': 'CustomInput', 'label': 'Địa chỉ' , 'required': False, 'row': 1, 'col1' : 2, 'col2': 3},
 
-            {'name': 'phone_number', 'type': 'CustomInput', 'label': 'Số điện thoại' , 'required': True, 'row': 2, 'col1' : 0, 'col2': 1},
+            {'name': 'phone_number', 'type': 'CustomInput', 'label': 'Số điện thoại' , 'required': False, 'row': 2, 'col1' : 0, 'col2': 1},
             {'name': 'email', 'type': 'CustomInput', 'label': 'Email' , 'required': False, 'row': 2, 'col1' : 2, 'col2': 3},
 
             {'name': 'position_id', 'type': 'ComboboxCustom', 'label': 'Vị trí', 'required': True, 'values': self.data_position, 'row': 3, 'col1' : 0, 'col2': 1},

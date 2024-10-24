@@ -8,7 +8,8 @@ class Role(BasePage):
     def __init__(self, parent, controller):
         super().__init__(parent)
         self.role_service = RoleService()
-        # self.on_show_frame()
+        self.set_permission_button(btn_add_show=True, btn_export_show=False)
+
 
 
         

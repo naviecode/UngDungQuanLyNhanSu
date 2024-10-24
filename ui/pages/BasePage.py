@@ -10,7 +10,7 @@ class BasePage(tk.Frame):
         self.nav_base.pack(padx=10,fill="x",expand=True)
         self.nav_base.pack_propagate(False)
 
-        self.button_export = ButtonImage(self.nav_base, "./images/icons/add.png", "Xuất Excel", self.export_excel,width=150, height=30, bg="#0178bc", fg="white")
+        self.button_export = ButtonImage(self.nav_base, "./images/icons/export_excel.png", "Xuất Excel", self.export_excel,width=150, height=30, bg="#0178bc", fg="white")
         self.button_export.pack(side="right",padx=10)
 
         self.button_add = ButtonImage(self.nav_base, "./images/icons/add.png", "Thêm mới", self.add,width=150, height=30, bg="#0178bc", fg="white")
@@ -25,7 +25,7 @@ class BasePage(tk.Frame):
         print("Tìm theo filter")
     def export_excel(self):
         print("export")
-    def set_permission(self, btn_export_show = True, btn_add_show = True):
+    def set_permission_button(self, btn_export_show = True, btn_add_show = True):
         if btn_export_show:
             self.button_export.pack()
         else:
@@ -39,14 +39,12 @@ class BasePage(tk.Frame):
             self.nav_base.pack_forget()
 
     def show_loading(self):
-        # Hiển thị popup loading
         self.loading_popup = LoadingPopup(self)
         self.loading_popup._from_base = True
         # Gọi quá trình load dữ liệu trong một thread khác
         threading.Thread(target=self.simulate_loading).start()
 
     def simulate_loading(self):
-        # Sau khi hoàn tất, đóng popup
         self.loading_popup.complete_loading()
 
 

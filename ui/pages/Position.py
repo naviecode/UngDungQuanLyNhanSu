@@ -10,7 +10,8 @@ class Position(BasePage):
         super().__init__(parent)
         self.department_service = DepartMentService()
         self.position_service = PositionService()
-        # self.on_show_frame()
+        self.set_permission_button(btn_add_show=True, btn_export_show=False)
+
 
 
     def search(self):

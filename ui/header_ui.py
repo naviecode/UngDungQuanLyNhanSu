@@ -50,9 +50,11 @@ class Header(tk.Frame):
         # Tạo cửa sổ popup
         popup = tk.Toplevel(self.master)
         x = (self.main_app.screen_width //2) - (300//2)
-        y = (self.main_app.screen_height //2) - (180//2)
+        y = (self.main_app.screen_height //2) - (220//2)
         popup.title("Thông tin người dùng")
-        popup.geometry(f'{300}x{180}+{x}+{y}') # Kích thước popup
+        popup.iconbitmap('./images/icons/user_info_1.ico')
+
+        popup.geometry(f'{300}x{220}+{x}+{y}')
         popup.grab_set()
         # Nội dung trong popup
         label = tk.Label(popup, text="Thông tin người dùng", font=("Helvetica", 13))
@@ -61,6 +63,8 @@ class Header(tk.Frame):
         frame = tk.Frame(popup)
         frame.pack(padx=10)
         tk.Label(frame, text=f"Họ tên: {self.userInfo["name"]}", font=("Helvetica", 11)).pack(fill="x",expand=True , anchor="w")
+        tk.Label(frame, text=f"Quyền: {self.userInfo["role_name"]}", font=("Helvetica", 11)).pack(fill="x",expand=True, anchor="w")
+        tk.Label(frame, text=f"Phòng ban: {self.userInfo["department_name"]}", font=("Helvetica", 11)).pack(fill="x",expand=True, anchor="w")
         tk.Label(frame, text=f"Vị trí: {self.userInfo["position_name"]}", font=("Helvetica", 11)).pack(fill="x",expand=True, anchor="w")
         tk.Label(frame, text=f"Email: {self.userInfo["email"]}", font=("Helvetica", 11)).pack(fill="x",expand=True, anchor="w")
         tk.Label(frame, text=f"Ngày bắt đầu: {self.userInfo["start_date"]}", font=("Helvetica", 11)).pack(fill="x",expand=True, anchor="w")
