@@ -150,8 +150,3 @@ class FormPopup(tk.Toplevel):
                 if(not widget.validate_input()):
                     return False
         return True
-
-    def prepare_popup_data(self):
-        print("Đang chuẩn bị dữ liệu cho popup...")
-        time.sleep(2)  # Giả lập một hàm chờ 2 giây để chuẩn bị dữ liệu (có thể thay bằng logic xử lý khác)
-        print("Dữ liệu đã sẵn sàng!")

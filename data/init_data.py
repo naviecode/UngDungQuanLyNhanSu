@@ -67,7 +67,9 @@ class InitData:
                     start_date DATE NOT NULL,                       -- Ngày bắt đầu hợp đồng
                     end_date DATE,                                  -- Ngày kết thúc hợp đồng (nếu có)
                     salary DECIMAL(10, 2) NOT NULL,                 -- Mức lương
-                    benefits TEXT                                   -- Quyền lợi (nếu có)
+                    benefits TEXT,                                    -- Quyền lợi (nếu có)
+                    check_in_time TIME NOT NULL,                             -- Giờ vào
+                    check_out_time TIME NOT NULL                             -- Giờ ra
                 )
             
             """

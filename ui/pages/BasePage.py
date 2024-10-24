@@ -38,7 +38,6 @@ class BasePage(tk.Frame):
         if(btn_add_show is not True and btn_export_show is not True):
             self.nav_base.pack_forget()
 
-        print("permission base")
     def show_loading(self):
         # Hiển thị popup loading
         self.loading_popup = LoadingPopup(self)
