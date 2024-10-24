@@ -1,4 +1,4 @@
-from data.init_data import InitData
+from data import InitData
 import configparser
 
 class EmployeeService:
@@ -57,9 +57,13 @@ class EmployeeService:
                 ELSE 'Unknown'
             END genderName,
             B.position_name,
-            DATE_FORMAT(A.start_date, '%d/%m/%Y') AS start_date
+            C.department_name,
+            DATE_FORMAT(A.start_date, '%d/%m/%Y') AS start_date,
+            DATE_FORMAT(D.end_date, '%d/%m/%Y') AS end_date
             FROM employees A
             LEFT JOIN positions B ON A.position_id = B.position_id
+            LEFT JOIN departments C ON B.department_id = C.department_id
+            LEFT JOIN contracts D ON A.employee_id = D.employee_id  
         ''')
         rows = cursor.fetchall()
 
@@ -133,14 +137,21 @@ class EmployeeService:
 
         return cursor.rowcount
 
-    def getCombox(self):
+    def getCombox(self, filters = None):
         self.db.connect_database()
         cursor = self.db.connection.cursor()
-        
-        cursor.execute('''
-            SELECT employee_id, name
-            FROM employees 
-        ''')
+        if filters is None:
+            cursor.execute('''
+                SELECT employee_id, name
+                FROM employees 
+            ''')
+        else:
+            cursor.execute(f'''
+                SELECT employee_id, name
+                FROM employees 
+                WHERE employee_id = {filters['employee_id']}
+            ''')
+
         rows = cursor.fetchall()
 
         cursor.close()
@@ -171,10 +182,13 @@ class EmployeeService:
         cursor = self.db.connection.cursor()
 
         cursor.execute(f'''
-        SELECT employee_id, A.name, A.email, A.start_date, B.position_name
+        SELECT A.employee_id, A.name, A.email, DATE_FORMAT(A.start_date, '%d/%m/%Y') AS start_date, B.position_name, C.department_name, F.role_name
         FROM employees A                      
         LEFT JOIN positions B on A.position_id = B.position_id
-        WHERE employee_id = {empId}
+        LEFT JOIN departments C on B.department_id = C.department_id
+        LEFT JOIN employee_roles D on A.employee_id = D.employee_id
+        LEFT JOIN roles F on D.role_id = F.role_id
+        WHERE A.employee_id = {empId}
         ''')
 
         columns_name = [desc[0] for desc in cursor.description]

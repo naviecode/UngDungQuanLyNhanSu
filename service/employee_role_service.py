@@ -1,4 +1,4 @@
-from data.init_data import InitData
+from data import InitData
 import configparser
 
 class EmployeeRoleService:

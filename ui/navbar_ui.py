@@ -2,25 +2,18 @@ import tkinter as tk
 from PIL import Image, ImageTk
 from tkinter import messagebox
 from datetime import datetime
-from models.attendance.attendance_model import attendance_model
-from service.attendance_service import AttendanceService
-from ui.pages.Overview import Overview
-from ui.pages.Employee import Employee
-from ui.pages.Contract import Contract
-from ui.pages.License import License
-from ui.pages.Role import Role
-from ui.pages.Timesheet import Timesheet
-from ui.pages.Department import Department
-from ui.pages.Position import Position
-from ui.pages.EmployeeRole import EmployeeRole
 import globals
-
+from models import AttendanceModel
+from service import AttendanceService
+from ui.pages import Overview, Employee, Contract, License, Role, Timesheet, Department, Position, EmployeeRole
+from helper import ButtonImage
 
 
 
 class Navbar(tk.Frame):
     def __init__(self, parent, frames):
         super().__init__(parent)
+
         self.attendance_service = AttendanceService()
         #Navigation
         navigation = tk.Frame(self, bg="white", width=250)
@@ -51,70 +44,78 @@ class Navbar(tk.Frame):
         self.buttons = []
         self.frames = frames
         
-        button_main = self.CreateButtonNav(nav_main, "Tổng quan", "./images/icons/overview.png",True,lambda: self.change_color(button_main, Overview))
-        button_main.pack()
-        self.buttons.append(button_main)
+        self.button_main = ButtonImage(parent=nav_main, image_path="./images/icons/overview.png", text="Tổng quan", command=lambda: self.change_color(self.button_main, Overview), width=250, activeBg="#0178bc", activefg="white", bg="white", fg="black", active=True)
+        self.button_main.pack()
+        self.buttons.append(self.button_main)
 
-        button_dep = self.CreateButtonNav(nav_main, "Phòng ban", "./images/icons/department.png",False,lambda: self.change_color(button_dep, Department))
-        button_dep.pack()
-        self.buttons.append(button_dep)
+        self.button_dep = ButtonImage(parent=nav_main, image_path="./images/icons/department.png", text="Phòng ban", command=lambda: self.change_color(self.button_dep, Department), width=250, activeBg="#0178bc", activefg="white", bg="white", fg="black", active=False)
+        self.button_dep.pack()
+        self.buttons.append(self.button_dep)
 
-        button_position = self.CreateButtonNav(nav_main, "Chức vụ", "./images/icons/position.png",False,lambda: self.change_color(button_position, Position))
-        button_position.pack()
-        self.buttons.append(button_position)
-        
-        button_employee = self.CreateButtonNav(nav_main, "Nhân viên", "./images/icons/user_menu.png",False,lambda: self.change_color(button_employee, Employee))
-        button_employee.pack()
-        self.buttons.append(button_employee)
+        self.button_position = ButtonImage(parent=nav_main, image_path="./images/icons/position.png", text="Chức vụ", command=lambda: self.change_color(self.button_position, Position), width=250, activeBg="#0178bc", activefg="white", bg="white", fg="black", active=False)
+        self.button_position.pack()
+        self.buttons.append(self.button_position)
 
-        button_timesheet = self.CreateButtonNav(nav_main,"Bảng chấm công", "./images/icons/timesheet.png",False,lambda: self.change_color(button_timesheet, Timesheet))
-        button_timesheet.pack()
-        self.buttons.append(button_timesheet)
+        self.button_employee = ButtonImage(parent=nav_main, image_path="./images/icons/user_menu.png", text="Nhân viên", command=lambda: self.change_color(self.button_employee, Employee), width=250, activeBg="#0178bc", activefg="white", bg="white", fg="black", active=False)
+        self.button_employee.pack()
+        self.buttons.append(self.button_employee)
 
-        button_license = self.CreateButtonNav(nav_main,"Đơn từ", "./images/icons/license.png",False,lambda: self.change_color(button_license, License))
-        button_license.pack()
-        self.buttons.append(button_license)
+        self.button_timesheet = ButtonImage(parent=nav_main, image_path="./images/icons/timesheet.png", text="Bảng chấm công", command=lambda: self.change_color(self.button_timesheet, Timesheet), width=250, activeBg="#0178bc", activefg="white", bg="white", fg="black", active=False)
+        self.button_timesheet.pack()
+        self.buttons.append(self.button_timesheet)
 
-        button_contract = self.CreateButtonNav(nav_main,"Hợp đồng", "./images/icons/contract.png",False,lambda: self.change_color(button_contract, Contract))
-        button_contract.pack()
-        self.buttons.append(button_contract)
+        self.button_license = ButtonImage(parent=nav_main, image_path="./images/icons/license.png", text="Đơn từ", command=lambda: self.change_color(self.button_license, License), width=250, activeBg="#0178bc", activefg="white", bg="white", fg="black", active=False)
+        self.button_license.pack()
+        self.buttons.append(self.button_license)
 
-        button_employee_role = self.CreateButtonNav(nav_main,"Phân quyền", "./images/icons/role_employee.png",False,lambda: self.change_color(button_employee_role, EmployeeRole))
-        button_employee_role.pack()
-        self.buttons.append(button_employee_role)
+        self.button_contract = ButtonImage(parent=nav_main, image_path="./images/icons/contract.png", text="Hợp đồng", command=lambda: self.change_color(self.button_contract, Contract), width=250, activeBg="#0178bc", activefg="white", bg="white", fg="black", active=False)
+        self.button_contract.pack()
+        self.buttons.append(self.button_contract)
 
-        button_role = self.CreateButtonNav(nav_main,"Quyền", "./images/icons/permission.png",False,lambda: self.change_color(button_role, Role))
-        button_role.pack()
-        self.buttons.append(button_role)
+        self.button_employee_role = ButtonImage(parent=nav_main, image_path="./images/icons/role_employee.png", text="Phân quyền", command=lambda: self.change_color(self.button_employee_role, EmployeeRole), width=250, activeBg="#0178bc", activefg="white", bg="white", fg="black", active=False)
+        self.button_employee_role.pack()
+        self.buttons.append(self.button_employee_role)
 
+        self.button_role = ButtonImage(parent=nav_main, image_path="./images/icons/permission.png", text="Quyền", command=lambda: self.change_color(self.button_role, Role), width=250, activeBg="#0178bc", activefg="white", bg="white", fg="black", active=False)
+        self.button_role.pack()
+        self.buttons.append(self.button_role)
 
-        
-    def CreateButtonNav(self, parent, text, image_path,active, command):
-        button_image = Image.open(image_path)
-        resized_button_image = button_image.resize((20,20))
-        self.button_image_photo = ImageTk.PhotoImage(resized_button_image)
-        bg_button_active = "#0178bc" if active else "white"
-        fg_button_active = "white" if active else "black"
-        button = tk.Button(parent,
-            image= self.button_image_photo,
-            compound="left",
-            text=text,font=(11),
-            width=250,
-            relief="flat",
-            activebackground="#0178bc",
-            activeforeground="white",
-            cursor="hand2",
-            highlightthickness=0,
-            bd=0,
-            pady=8,
-            padx=10,
-            bg=bg_button_active, 
-            fg=fg_button_active,
-            anchor="w",
-            command= command
-        )
-        button.image = self.button_image_photo 
-        return button
+        self.set_permission()
+
+    def set_permission(self):
+        if globals.current_user.role_id == 1:
+            """ADMIN"""
+            self.button_main.pack()
+            self.button_dep.pack()
+            self.button_position.pack()
+            self.button_employee.pack()
+            self.button_timesheet.pack()
+            self.button_license.pack()
+            self.button_contract.pack()
+            self.button_employee_role.pack()
+            self.button_role.pack()
+        elif globals.current_user.role_id == 3:
+            """MANAGER"""
+            self.button_main.pack()
+            self.button_dep.pack()
+            self.button_position.pack()
+            self.button_employee.pack()
+            self.button_timesheet.pack()
+            self.button_license.pack()
+            self.button_contract.pack_forget()
+            self.button_employee_role.pack_forget()
+            self.button_role.pack_forget()
+        else:
+            """USER"""
+            self.button_main.pack()
+            self.button_dep.pack_forget()
+            self.button_position.pack_forget()
+            self.button_employee.pack_forget()
+            self.button_timesheet.pack()
+            self.button_license.pack()
+            self.button_contract.pack_forget()
+            self.button_employee_role.pack_forget()
+            self.button_role.pack_forget()
     
     def change_color(self, button, page):
         # Đặt màu cho các button
@@ -125,9 +126,12 @@ class Navbar(tk.Frame):
 
     def show_page(self, page):
         frame = self.frames[page]
+        frame.show_loading()
         frame.clear_frame_data()
         frame.tkraise()
         frame.on_show_frame()
+        frame.simulate_loading()
+        
 
     def initNav(self, content, parent):
         for F in (Overview, Department, Position, Employee, Contract, Role, Timesheet, License, EmployeeRole):
@@ -138,7 +142,7 @@ class Navbar(tk.Frame):
     def attendance(self):
         response = messagebox.askyesno("Chấm công", "Bạn có muốn thực hiện chấm công?")
         if response:
-            data = attendance_model(
+            data = AttendanceModel(
                 employee_id=globals.current_user.employee_id,
                 check_in = datetime.now(),
                 check_out = datetime.now(),
@@ -148,3 +152,5 @@ class Navbar(tk.Frame):
             )
             self.attendance_service.handle(data)
             messagebox.showinfo("Thông báo", "Xin cảm ơn")
+
+    

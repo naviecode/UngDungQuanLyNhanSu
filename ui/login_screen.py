@@ -1,9 +1,9 @@
 import tkinter as tk
 from tkinter import messagebox
-from service.employee_service import EmployeeService
 import globals
-from models.user.user_model import User
-from helper.CustomInputText import CustomInputText
+from service import EmployeeService
+from models import UserModel
+from helper import CustomInputText
 
 
 class LoginScreen:
@@ -14,6 +14,7 @@ class LoginScreen:
         x = (main_app.screen_width //2) - (350//2)
         y = (main_app.screen_height //2) - (200//2)
         self.master.geometry(f'{350}x{200}+{x}+{y}')
+        self.master.iconbitmap('./images/icons/screen_login.ico')
 
         self.master.title("Đăng nhập nhân viên")
         # Label và Entry cho tên người dùng
@@ -39,8 +40,7 @@ class LoginScreen:
     def is_login(self, username, password):
         result = self.employee_service.getLoginUser(username, password)
         if result is not None:
-            globals.current_user = User(result[0],result[1],result[2], result[3])
-
+            globals.current_user = UserModel(result[0],result[1],result[2], result[3])
             return True
         else:
             return False
@@ -55,8 +55,8 @@ class LoginScreen:
 
         if self.is_login(username, password):
             messagebox.showinfo("Thành công", "Đăng nhập thành công!")
-            self.master.destroy()  # Đóng cửa sổ đăng nhập
-            self.main_app.open_main_window()  # Gọi cửa sổ chính từ main_app
+            self.master.destroy() 
+            self.main_app.open_main_window() 
         else:
             messagebox.showerror("Thất bại", "Tên đăng nhập hoặc mật khẩu không đúng!")
     

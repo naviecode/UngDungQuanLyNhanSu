@@ -1,4 +1,4 @@
-from data.init_data import InitData
+from data import InitData
 import configparser
 
 class ContractService:
@@ -16,7 +16,9 @@ class ContractService:
             start_date, 
             end_date,
             salary,
-            benefits                            
+            benefits,
+            check_int_time,
+            check_out_time                            
         )
         VALUES 
         (
@@ -24,7 +26,9 @@ class ContractService:
             '{input["start_date"]}',
             '{input["end_date"]}',
             {input["salary"]},
-            N'{input["benefits"]}'
+            N'{input["benefits"]}',
+            '{input["check_in_time"]}',
+            '{input["check_out_time"]}'
         )
         ''')
 
@@ -39,7 +43,7 @@ class ContractService:
         
         cursor.execute("""
         SELECT A.contract_id,         
-        B.name, A.salary, 
+        B.name, CONCAT(FORMAT(A.salary, 0), ' VND'), 
         DATE_FORMAT(A.start_date, '%d/%m/%Y') AS start_date, DATE_FORMAT(A.end_date, '%d/%m/%Y') AS end_date               
         FROM contracts A
         LEFT JOIN employees B on A.employee_id = B.employee_id
@@ -57,7 +61,9 @@ class ContractService:
         self.db.connection.cursor().execute(f'''
         UPDATE contracts 
         SET salary = {data["salary"]}, 
-        benefits = N'{data["benefits"]}'
+        benefits = N'{data["benefits"]}',
+        check_in_time = '{data["check_in_time"]}',
+        check_out_time = '{data["check_out_time"]}'
         WHERE contract_id = {data["contract_id"]}
         ''')
         self.db.connection.commit()

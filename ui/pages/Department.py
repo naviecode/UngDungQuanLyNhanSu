@@ -1,10 +1,8 @@
 import tkinter as tk
-from helper.CustomTreeView import CustomTreeView
-from ui.pages.BasePage import BasePage
 from tkinter import messagebox
-from service.department_service import DepartMentService
-from service.employee_service import EmployeeService
-from helper.FormPopup import FormPopup
+from helper import CustomTreeView, FormPopup
+from ui.pages import BasePage
+from service import DepartMentService, EmployeeService
 
 
 
@@ -14,7 +12,8 @@ class Department(BasePage):
         self.controller = controller
         self.employee_service = EmployeeService()
         self.department_service = DepartMentService()
-        self.on_show_frame()
+        self.set_permission_button(btn_add_show=True, btn_export_show=False)
+
 
 
     def search(self):
@@ -106,13 +105,13 @@ class Department(BasePage):
         ]
 
         self.fields = [
-            {'name': 'department_id', 'type': 'ID', 'label': 'ID' , 'row': 0, 'col1' : 1, 'col2': 2},
+            {'name': 'department_id', 'type': 'ID', 'label': 'ID' , 'required': False, 'row': 0, 'col1' : 1, 'col2': 2},
 
-            {'name': 'department_name', 'type': 'CustomInput', 'label': 'Tên phòng ban' , 'row': 0, 'col1' : 0, 'col2': 1},
-            {'name': 'location', 'type': 'CustomInput', 'label': 'Địa điểm', 'row': 0, 'col1' : 2, 'col2': 3},
+            {'name': 'department_name', 'type': 'CustomInput', 'label': 'Tên phòng ban' , 'required': True, 'row': 0, 'col1' : 0, 'col2': 1},
+            {'name': 'location', 'type': 'CustomInput', 'label': 'Địa điểm', 'row': 0, 'required': False, 'col1' : 2, 'col2': 3},
 
-            {'name': 'description', 'type': 'CustomInput', 'label': 'Mô tả', 'row': 1, 'col1' : 0, 'col2': 1},
-            {'name': 'manager_id', 'type': 'ComboboxCustom', 'label': 'Người quản lý', 'values': self.data_employee , 'row': 1, 'col1' : 2, 'col2': 3},
+            {'name': 'description', 'type': 'CustomInput', 'label': 'Mô tả', 'required': False, 'row': 1, 'col1' : 0, 'col2': 1},
+            {'name': 'manager_id', 'type': 'ComboboxCustom', 'label': 'Người quản lý', 'required': True, 'values': self.data_employee , 'row': 1, 'col1' : 2, 'col2': 3},
         ]
 
 

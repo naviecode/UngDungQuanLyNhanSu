@@ -1,10 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
 from tkcalendar import DateEntry
-from helper.CustomCombobox import CustomCombobox
-from helper.CustomInputText import CustomInputText
-from helper.CustomInputDate import CustomInputDate
 import time
+from helper import CustomCombobox, CustomInputText, CustomInputDate
 
 class FormPopup(tk.Toplevel):
     def __init__(self, parent, title, form_fields ,type = None, form_data=None, width = 640, height = 300):
@@ -13,7 +11,8 @@ class FormPopup(tk.Toplevel):
         self.geometry(f"{width}x{height}")
         self.title(title)
         self.parent = parent
-        
+        self.iconbitmap('./images/icons/form.ico')
+
         window_width = width
         window_height = height
         screen_width = parent.winfo_screenwidth()
@@ -76,15 +75,15 @@ class FormPopup(tk.Toplevel):
                 combobox.grid(row=field['row'], column=field['col2'], padx=10, pady=5)
                 self.field_widgets[field['name']] = combobox
             elif field_type == "CustomInput":
-                entry = CustomInputText(self, field['label'], 30)
+                entry = CustomInputText(self, field['label'], 30, required=field['required'])
                 entry.grid(row=field['row'], column=field['col2'], padx=10, pady=10)
                 self.field_widgets[field['name']] = entry
             elif field_type == "ComboboxCustom":
-                comboboxcustom = CustomCombobox(parent = self, text=field['label'], dataArray= field.get('values', []), width=30-4)
+                comboboxcustom = CustomCombobox(parent = self, text=field['label'], dataArray= field.get('values', []), width=30-4 , required=field['required'])
                 comboboxcustom.grid(row=field['row'], column=field['col2'], padx=10, pady=10)
                 self.field_widgets[field['name']] = comboboxcustom
             elif field_type == "CustomDate":
-                date_entry = CustomInputDate(self, field['label'], 30-4, "", "")
+                date_entry = CustomInputDate(self, field['label'], 30-4, "", "", required=field['required'])
                 date_entry.grid(row=field['row'], column=field['col2'], padx=10, pady=10)
                 self.field_widgets[field['name']] = date_entry
                 
@@ -152,8 +151,3 @@ class FormPopup(tk.Toplevel):
                 if(not widget.validate_input()):
                     return False
         return True
-
-    def prepare_popup_data(self):
-        print("Đang chuẩn bị dữ liệu cho popup...")
-        time.sleep(2)  # Giả lập một hàm chờ 2 giây để chuẩn bị dữ liệu (có thể thay bằng logic xử lý khác)
-        print("Dữ liệu đã sẵn sàng!")

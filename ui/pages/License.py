@@ -1,21 +1,26 @@
 import tkinter as tk
-from ui.pages.BasePage import BasePage
-from service.license_service import LicenseService
-from helper.CustomTreeView import CustomTreeView
-from service.employee_service import EmployeeService
-from helper.FormPopup import FormPopup
 from tkinter import messagebox
+from ui.pages import BasePage
+from service import LicenseService, EmployeeService
+from helper import FormPopup, CustomTreeView
+import globals
+
 class License(BasePage):
     def __init__(self, parent, controller):
         super().__init__(parent)
         self.employee_service = EmployeeService()
         self.license_service = LicenseService()
-        self.on_show_frame()
+        self.set_permission_button(btn_add_show=True, btn_export_show=False)
+
 
 
 
     def search(self):
-        rows = self.license_service.search()
+        self.filters_license = {'employee_id': globals.current_user.employee_id}
+        if globals.current_user.role_id == 2:
+            rows = self.license_service.search(self.filters_license)
+        else:
+            rows = self.license_service.search(None)
         return rows
     
     def add(self):
@@ -30,7 +35,6 @@ class License(BasePage):
     def insert(self, data):
         confirm = messagebox.askyesno("Xác nhận thêm mới", "Bạn có chắc chắn muốn thêm mới ?")
         if confirm:
-            print(data)
             result = self.license_service.insert(data)
             self.treeView.loadData()
             return True
@@ -55,8 +59,8 @@ class License(BasePage):
     def on_show_frame(self):
         label = tk.Label(self, text="ĐƠN XIN PHÉP", font=("Helvetica", 16))
         label.pack(pady=20)
-        self.employee_data = self.employee_service.getCombox()
-        self.datas = self.search()
+   
+        self.status_license =  [('Pending', 'Pending'), ('Approved', 'Approved'), ('Rejected', 'Rejected') ]
         columns = [
             {
                 'key': 'ID',
@@ -90,7 +94,7 @@ class License(BasePage):
             },
             {
                 'key': 'status',
-                'name': 'Ngày kết thúc',
+                'name': 'Trạng thái',
                 'width': 80,
                 'anchor': 'center'
             },
@@ -101,23 +105,39 @@ class License(BasePage):
                 'anchor': 'center'
             }
         ]
+        self.datas = self.license_service.search()
+        if globals.current_user.role_id == 2:
+            self.employee_data = self.employee_service.getCombox({'employee_id': globals.current_user.employee_id})
+            self.fields = [
+                {'name': 'request_id', 'type': 'ID', 'label': 'ID' , 'required': False, 'row': 0, 'col1' : 1, 'col2': 2},
 
-        self.fields = [
-            {'name': 'request_id', 'type': 'ID', 'label': 'ID' , 'row': 0, 'col1' : 1, 'col2': 2},
+                {'name': 'employee_id', 'type': 'ComboboxCustom', 'label': 'Nhân viên' , 'required': True, 'values': self.employee_data, 'row': 0, 'col1' : 0, 'col2': 1},
+                {'name': 'reason', 'type': 'CustomInput', 'label': 'Lý do', 'required': True, 'row': 0, 'col1' : 2, 'col2': 3},
 
-            {'name': 'employee_id', 'type': 'ComboboxCustom', 'label': 'Nhân viên' ,'values': self.employee_data, 'row': 0, 'col1' : 0, 'col2': 1},
-            {'name': 'reason', 'type': 'CustomInput', 'label': 'Lý do', 'row': 0, 'col1' : 2, 'col2': 3},
+                {'name': 'start_date', 'type': 'CustomDate', 'label': 'Ngày bắt đầu', 'required': True, 'row': 1, 'col1' : 0, 'col2': 1},
+                {'name': 'end_date', 'type': 'CustomDate', 'label': 'Ngày kết thúc' , 'required': True, 'row': 1, 'col1' : 2, 'col2': 3},
+            ]
+            
+        else:
+            self.employee_data = self.employee_service.getCombox(None)
+            self.fields = [
+                {'name': 'request_id', 'type': 'ID', 'label': 'ID' , 'required': False, 'row': 0, 'col1' : 1, 'col2': 2},
 
-            {'name': 'start_date', 'type': 'CustomDate', 'label': 'Ngày bắt đầu', 'row': 1, 'col1' : 0, 'col2': 1},
-            {'name': 'end_date', 'type': 'CustomDate', 'label': 'Ngày kết thúc' , 'row': 1, 'col1' : 2, 'col2': 3},
+                {'name': 'employee_id', 'type': 'ComboboxCustom', 'label': 'Nhân viên' , 'required': True,'values': self.employee_data, 'row': 0, 'col1' : 0, 'col2': 1},
+                {'name': 'reason', 'type': 'CustomInput', 'label': 'Lý do', 'required': True, 'row': 0, 'col1' : 2, 'col2': 3},
 
-            {'name': 'status', 'type': 'ComboboxCustom', 'label': 'Trạng thái' ,'values': [('Pending', 'Pending'), ('Approved', 'Approved'), ('Rejected', 'Rejected') ], 'row': 2, 'col1' : 0, 'col2': 1},
-        ]
+                {'name': 'start_date', 'type': 'CustomDate', 'label': 'Ngày bắt đầu', 'required': True, 'row': 1, 'col1' : 0, 'col2': 1},
+                {'name': 'end_date', 'type': 'CustomDate', 'label': 'Ngày kết thúc' , 'required': True, 'row': 1, 'col1' : 2, 'col2': 3},
+
+                {'name': 'status', 'type': 'ComboboxCustom', 'label': 'Trạng thái', 'required': True,'values': self.status_license, 'row': 2, 'col1' : 0, 'col2': 1},
+            ]
 
         #Get view
         self.frame_view = tk.Frame(self)
         self.frame_view.pack(padx=10, fill="both", expand=True)
         self.treeView = CustomTreeView(self.frame_view, self, self.datas, columns, len(columns) - 1)
+
+        
 
     def clear_frame_data(self):
         for widget in self.winfo_children():

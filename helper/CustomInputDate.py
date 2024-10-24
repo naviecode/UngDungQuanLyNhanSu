@@ -1,14 +1,19 @@
 import tkinter as tk
 from tkinter import messagebox
 from tkcalendar import DateEntry
-import datetime
 
 class CustomInputDate:
-    def __init__(self, parent, text, width, selectMode, date_pattern):
+    def __init__(self, parent, text, width, selectMode, date_pattern , required = False):
         self.text = text
         self.date_entry = DateEntry(parent, width=width, selectmode='day', date_pattern='dd-mm-y')
+        self.novalidate = True
+        if(required):
+            self.novalidate = False
+
 
     def validate_input(self):
+        if(self.novalidate):
+            return True
         if self.get_value() == "":
             messagebox.showerror("Lỗi nhập liệu", f"vui lòng chọn ngày hợp lệ {self.text}")
             return False

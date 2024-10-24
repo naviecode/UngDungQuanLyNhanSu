@@ -1,17 +1,15 @@
 import tkinter as tk
-from ui.pages.BasePage import BasePage
-from helper.CustomTreeView import CustomTreeView
-from helper.FormPopup import FormPopup
-from service.contract_service import ContractService
-from service.employee_service import EmployeeService
 from tkinter import messagebox
+from ui.pages import BasePage
+from helper import CustomTreeView, FormPopup
+from service import ContractService, EmployeeService
 
 class Contract(BasePage):
     def __init__(self, parent, controller):
         super().__init__(parent)
         self.employee_service = EmployeeService()
         self.contract_service = ContractService()
-        self.on_show_frame()
+        self.set_permission_button(btn_add_show=True, btn_export_show=False)
 
 
     def search(self):
@@ -20,12 +18,12 @@ class Contract(BasePage):
     
     def add(self):
         self.title_popup = "Thêm mới"
-        form_popup = FormPopup(parent = self, title = self.title_popup,form_fields = self.fields,form_data = None, width=640, height=180)
+        form_popup = FormPopup(parent = self, title = self.title_popup,form_fields = self.fields,form_data = None, width=640, height=220)
     
     def edit(self, row_id):
         self.title_popup = "Cập nhập"
         data = self.contract_service.getById(row_id)
-        form_popup = FormPopup(parent = self, title = self.title_popup,form_fields = self.fields,form_data = data, width=640, height=180)
+        form_popup = FormPopup(parent = self, title = self.title_popup,form_fields = self.fields,form_data = data, width=640, height=220)
 
     def insert(self, data):
         confirm = messagebox.askyesno("Xác nhận thêm mới", "Bạn có chắc chắn muốn thêm mới ?")
@@ -97,15 +95,18 @@ class Contract(BasePage):
         ]
 
         self.fields = [
-            {'name': 'contract_id', 'type': 'ID', 'label': 'ID' , 'row': 0, 'col1' : 1, 'col2': 2},
+            {'name': 'contract_id', 'type': 'ID', 'label': 'ID' , 'required': False, 'row': 0, 'col1' : 1, 'col2': 2},
 
-            {'name': 'employee_id', 'type': 'ComboboxCustom', 'label': 'Nhân viên' ,'values': self.data_employee, 'row': 0, 'col1' : 0, 'col2': 1},
-            {'name': 'salary', 'type': 'CustomInput', 'label': 'Mức lương', 'row': 0, 'col1' : 2, 'col2': 3},
+            {'name': 'employee_id', 'type': 'ComboboxCustom', 'label': 'Nhân viên' , 'required': True,'values': self.data_employee, 'row': 0, 'col1' : 0, 'col2': 1},
+            {'name': 'salary', 'type': 'CustomInput', 'label': 'Mức lương', 'required': True, 'row': 0, 'col1' : 2, 'col2': 3},
 
-            {'name': 'start_date', 'type': 'CustomDate', 'label': 'Ngày bắt đầu' , 'row': 1, 'col1' : 0, 'col2': 1},
-            {'name': 'end_date', 'type': 'CustomDate', 'label': 'Ngày kết thúc', 'row': 1, 'col1' : 2, 'col2': 3},
+            {'name': 'start_date', 'type': 'CustomDate', 'label': 'Ngày bắt đầu' , 'required': True, 'row': 1, 'col1' : 0, 'col2': 1},
+            {'name': 'end_date', 'type': 'CustomDate', 'label': 'Ngày kết thúc', 'required': True, 'row': 1, 'col1' : 2, 'col2': 3},
 
-            {'name': 'benefits', 'type': 'CustomInput', 'label': 'Đặc quyền(nếu có)', 'row': 2, 'col1' : 0, 'col2': 1}
+            {'name': 'benefits', 'type': 'CustomInput', 'label': 'Đặc quyền(nếu có)', 'required': True, 'row': 2, 'col1' : 0, 'col2': 1},
+
+            {'name': 'check_in_time', 'type': 'CustomInput', 'label': 'Giờ vào', 'required': True, 'row': 2, 'col1' : 2, 'col2': 3},
+            {'name': 'check_out_time', 'type': 'CustomInput', 'label': 'Giờ ra', 'required': True, 'row': 3, 'col1' : 0, 'col2': 1}
         ]
 
         self.fram_view = tk.Frame(self)

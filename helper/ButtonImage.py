@@ -2,29 +2,35 @@ import tkinter as tk
 from PIL import Image, ImageTk
 
 class ButtonImage:
-    def __init__(self, parent, image_path, text="", command=None, width=150, height=30, bg="white", fg="black"):
+    def __init__(self, parent, image_path, text="", command=None, width=150, height=40, active = False, activeBg="white", activefg="black", bg = "white", fg = "black", anchor = "w", cursor = "hand2", fontsize=11, compound="left", pady=0, padx=10):
         self.frame = tk.Frame(parent, width=width, height=height)
         self.frame.pack_propagate(False)
 
         self.button_image = Image.open(image_path)
         self.resized_button_image = self.button_image.resize((20,20))
         self.button_image_photo = ImageTk.PhotoImage(self.resized_button_image)
+
+        if(active):
+            bg = "#0178bc" if active else "white"
+            fg = "white" if active else "black"
+
         self.button = tk.Button(self.frame,
             image= self.button_image_photo,
-            compound="left",
-            text=text,font=(10),
+            compound=compound,
+            text=text,font=(fontsize),
             width=width,
             height=height,
             relief="flat",
-            activebackground=bg,
-            activeforeground=fg,
-            cursor="hand2",
+            activebackground=activeBg,
+            activeforeground=activefg,
+            cursor=cursor,
             highlightthickness=0,
-            padx=10,
             bd=0,
+            padx=padx,
+            pady=pady,
             bg=bg, 
             fg=fg,
-            anchor="w",
+            anchor=anchor,
             command= command
         )
         self.button.image = self.button_image_photo 
@@ -32,6 +38,9 @@ class ButtonImage:
 
     def pack(self, **kwargs):
         self.frame.pack(**kwargs)
+
+    def pack_forget(self, **kwargs):
+        self.frame.pack_forget(**kwargs)
 
     def grid(self, **kwargs):
         self.frame.grid(**kwargs)
@@ -42,3 +51,6 @@ class ButtonImage:
     def destroy(self):
         self.button.destroy()
         self.frame.destroy()
+    
+    def config(self, **kwargs):
+        self.button.config(**kwargs)

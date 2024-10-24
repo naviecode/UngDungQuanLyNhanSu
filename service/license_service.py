@@ -1,4 +1,4 @@
-from data.init_data import InitData
+from data import InitData
 import configparser
 
 class LicenseService:
@@ -10,22 +10,19 @@ class LicenseService:
     def insert(self, input):
         self.db.connect_database()
         cursor = self.db.connection.cursor()
-        print(input)
         self.db.connection.cursor().execute(f'''
         INSERT INTO leave_requests (
             employee_id, 
             reason,
             start_date, 
-            end_date, 
-            status
+            end_date
         )
         VALUES 
         (
             {input["employee_id"]}, 
             '{input["reason"]}',
             '{input["start_date"]}',
-            '{input["end_date"]}',
-            '{input["status"]}'
+            '{input["end_date"]}'
         )
         ''')
 
@@ -34,22 +31,36 @@ class LicenseService:
         cursor.close()
         self.db.close_connection()
 
-    def search(self):
+    def search(self, filters = None):
         self.db.connect_database()
         cursor = self.db.connection.cursor()
-        
-        cursor.execute('''
+
+        if filters is None:
+            cursor.execute(f'''
             SELECT A.request_id, B.name, A.reason, DATE_FORMAT(A.start_date, '%d/%m/%Y') AS start_date, 
             DATE_FORMAT(A.end_date, '%d/%m/%Y') AS end_date, A.status
             FROM leave_requests A           
             LEFT JOIN employees B ON A.employee_id = B.employee_id
+            ''')
+        else:
+            cursor.execute(f'''
+            SELECT A.request_id, B.name, A.reason, DATE_FORMAT(A.start_date, '%d/%m/%Y') AS start_date, 
+            DATE_FORMAT(A.end_date, '%d/%m/%Y') AS end_date, A.status
+            FROM leave_requests A           
+            LEFT JOIN employees B ON A.employee_id = B.employee_id
+            WHERE A.employee_id = {filters["employee_id"]}
         ''')
+        
+        
         rows = cursor.fetchall()
 
         cursor.close()
         self.db.close_connection()
 
         return rows
+    
+    
+
     def update(self, data):
         self.db.connect_database()
 

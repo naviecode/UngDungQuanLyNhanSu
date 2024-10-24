@@ -1,18 +1,17 @@
 import tkinter as tk
-from tkinter import ttk
-from helper.CustomTreeView import CustomTreeView
-from ui.pages.BasePage import BasePage
 from tkinter import messagebox
-from service.position_service import PositionService
-from service.department_service import DepartMentService
-from helper.FormPopup import FormPopup
+from helper import CustomTreeView,FormPopup
+from ui.pages import BasePage
+from service import PositionService, DepartMentService
+
 
 class Position(BasePage):
     def __init__(self, parent, controller):
         super().__init__(parent)
         self.department_service = DepartMentService()
         self.position_service = PositionService()
-        self.on_show_frame()
+        self.set_permission_button(btn_add_show=True, btn_export_show=False)
+
 
 
     def search(self):
@@ -40,7 +39,6 @@ class Position(BasePage):
     def update(self, data):
         confirm = messagebox.askyesno("Xác nhận cập nhập", "Bạn có chắc chắn muốn cập nhập ?")
         if confirm:
-            print(data)
             result = self.position_service.update(data)
             self.treeView.loadData()
             return True
@@ -49,7 +47,6 @@ class Position(BasePage):
     def delete(self, row_id):
         confirm = messagebox.askyesno("Xác nhận xóa", "Bạn có chắc chắn muốn xóa nhân viên này?")
         if confirm:
-            print(row_id)
             result = self.position_service.delete(row_id)
             self.treeView.loadData()
             return True
@@ -98,12 +95,12 @@ class Position(BasePage):
         ]
 
         self.fields = [
-            {'name': 'position_id', 'type': 'ID', 'label': 'ID' , 'row': 0, 'col1' : 1, 'col2': 2},
+            {'name': 'position_id', 'type': 'ID', 'label': 'ID' , 'required': False, 'row': 0, 'col1' : 1, 'col2': 2},
 
-            {'name': 'position_name', 'type': 'CustomInput', 'label': 'Tên chức vụ' , 'row': 0, 'col1' : 0, 'col2': 1},
-            {'name': 'description', 'type': 'CustomInput', 'label': 'Mô tả', 'row': 0, 'col1' : 2, 'col2': 3},
+            {'name': 'position_name', 'type': 'CustomInput', 'label': 'Tên chức vụ' , 'required': True, 'row': 0, 'col1' : 0, 'col2': 1},
+            {'name': 'description', 'type': 'CustomInput', 'label': 'Mô tả', 'row': 0, 'required': False, 'col1' : 2, 'col2': 3},
 
-            {'name': 'department_id', 'type': 'ComboboxCustom', 'label': 'Phòng ban', 'values': self.data_department, 'row': 1, 'col1' : 0, 'col2': 1}
+            {'name': 'department_id', 'type': 'ComboboxCustom', 'label': 'Phòng ban', 'required': True, 'values': self.data_department, 'row': 1, 'col1' : 0, 'col2': 1}
         ]
 
         self.fram_view = tk.Frame(self)

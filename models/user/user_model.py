@@ -1,4 +1,4 @@
-class User:
+class UserModel:
     def __init__(self,employee_id, username, role_id, role_name):
         self.employee_id = employee_id
         self.username = username

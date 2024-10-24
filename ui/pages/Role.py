@@ -1,15 +1,15 @@
 import tkinter as tk
-from helper.CustomTreeView import CustomTreeView
-from ui.pages.BasePage import BasePage
 from tkinter import messagebox
-from service.role_service import RoleService
-from helper.FormPopup import FormPopup
+from service import RoleService
+from ui.pages import BasePage
+from helper import CustomTreeView, FormPopup
 
 class Role(BasePage):
     def __init__(self, parent, controller):
         super().__init__(parent)
         self.role_service = RoleService()
-        self.on_show_frame()
+        self.set_permission_button(btn_add_show=True, btn_export_show=False)
+
 
 
         
@@ -82,9 +82,9 @@ class Role(BasePage):
         ]
 
         self.fields = [
-            {'name': 'role_id', 'type': 'ID', 'label': 'ID' , 'row': 0, 'col1' : 1, 'col2': 2},
-            {'name': 'role_name', 'type': 'CustomInput', 'label': 'Tên quyền' , 'row': 0, 'col1' : 0, 'col2': 1},
-            {'name': 'description', 'type': 'CustomInput', 'label': 'Mô tả', 'row': 0, 'col1' : 2, 'col2': 3}
+            {'name': 'role_id', 'type': 'ID', 'label': 'ID' , 'required': False, 'row': 0, 'col1' : 1, 'col2': 2},
+            {'name': 'role_name', 'type': 'CustomInput', 'label': 'Tên quyền' , 'required': True, 'row': 0, 'col1' : 0, 'col2': 1},
+            {'name': 'description', 'type': 'CustomInput', 'label': 'Mô tả', 'required': False, 'row': 0, 'col1' : 2, 'col2': 3}
         ]
 
 
