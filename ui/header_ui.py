@@ -62,12 +62,12 @@ class Header(tk.Frame):
 
         frame = tk.Frame(popup)
         frame.pack(padx=10)
-        tk.Label(frame, text=f"Họ tên: {self.userInfo["name"]}", font=("Helvetica", 11)).pack(fill="x",expand=True , anchor="w")
-        tk.Label(frame, text=f"Quyền: {self.userInfo["role_name"]}", font=("Helvetica", 11)).pack(fill="x",expand=True, anchor="w")
-        tk.Label(frame, text=f"Phòng ban: {self.userInfo["department_name"]}", font=("Helvetica", 11)).pack(fill="x",expand=True, anchor="w")
-        tk.Label(frame, text=f"Vị trí: {self.userInfo["position_name"]}", font=("Helvetica", 11)).pack(fill="x",expand=True, anchor="w")
-        tk.Label(frame, text=f"Email: {self.userInfo["email"]}", font=("Helvetica", 11)).pack(fill="x",expand=True, anchor="w")
-        tk.Label(frame, text=f"Ngày bắt đầu: {self.userInfo["start_date"]}", font=("Helvetica", 11)).pack(fill="x",expand=True, anchor="w")
+        tk.Label(frame, text=f"Họ tên: {self.userInfo['name']}", font=("Helvetica", 11)).pack(fill="x",expand=True , anchor="w")
+        tk.Label(frame, text=f"Quyền: {self.userInfo['role_name']}", font=("Helvetica", 11)).pack(fill="x",expand=True, anchor="w")
+        tk.Label(frame, text=f"Phòng ban: {self.userInfo['department_name']}", font=("Helvetica", 11)).pack(fill="x",expand=True, anchor="w")
+        tk.Label(frame, text=f"Vị trí: {self.userInfo['position_name']}", font=("Helvetica", 11)).pack(fill="x",expand=True, anchor="w")
+        tk.Label(frame, text=f"Email: {self.userInfo['email']}", font=("Helvetica", 11)).pack(fill="x",expand=True, anchor="w")
+        tk.Label(frame, text=f"Ngày bắt đầu: {self.userInfo['start_date']}", font=("Helvetica", 11)).pack(fill="x",expand=True, anchor="w")
 
         # Nút Đóng
         frame_button = tk.Frame(frame)

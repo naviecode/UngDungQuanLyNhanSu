@@ -14,7 +14,10 @@ class BasePage(tk.Frame):
         self.button_export.pack(side="right",padx=10)
 
         self.button_add = ButtonImage(self.nav_base, "./images/icons/add.png", "Thêm mới", self.add,width=150, height=30, bg="#0178bc", fg="white")
-        self.button_add.pack(side="right")
+        self.button_add.pack(side="right",padx=10)
+
+        self.button_search = ButtonImage(self.nav_base, "./images/icons/add.png", "Tìm kiếm", self.search,width=150, height=30, bg="#0178bc", fg="white")
+        self.button_search.pack(side="right")
 
         # set widget thuộc base
         self.nav_base._from_base = True

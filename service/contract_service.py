@@ -17,7 +17,7 @@ class ContractService:
             end_date,
             salary,
             benefits,
-            check_int_time,
+            check_in_time,
             check_out_time                            
         )
         VALUES 
@@ -37,7 +37,7 @@ class ContractService:
         cursor.close()
         self.db.close_connection()
 
-    def search(self):
+    def search(self, filter = None):
         self.db.connect_database()
         cursor = self.db.connection.cursor()
         

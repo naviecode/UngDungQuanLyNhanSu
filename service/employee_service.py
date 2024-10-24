@@ -45,7 +45,7 @@ class EmployeeService:
         cursor.close()
         self.db.close_connection()
 
-    def search(self):
+    def search(self, filter = None):
         self.db.connect_database()
         cursor = self.db.connection.cursor()
         
