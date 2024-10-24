@@ -8,7 +8,7 @@ class Role(BasePage):
     def __init__(self, parent, controller):
         super().__init__(parent)
         self.role_service = RoleService()
-        self.on_show_frame()
+        # self.on_show_frame()
 
 
         

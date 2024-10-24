@@ -10,7 +10,7 @@ class License(BasePage):
         super().__init__(parent)
         self.employee_service = EmployeeService()
         self.license_service = LicenseService()
-        self.on_show_frame()
+        # self.on_show_frame()
 
 
 
@@ -34,7 +34,6 @@ class License(BasePage):
     def insert(self, data):
         confirm = messagebox.askyesno("Xác nhận thêm mới", "Bạn có chắc chắn muốn thêm mới ?")
         if confirm:
-            print(data)
             result = self.license_service.insert(data)
             self.treeView.loadData()
             return True

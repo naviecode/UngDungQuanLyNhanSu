@@ -10,7 +10,7 @@ class EmployeeRole(BasePage):
         self.employee_service = EmployeeService()
         self.role_service = RoleService()
         self.employee_role_service = EmployeeRoleService()
-        self.on_show_frame()
+        # self.on_show_frame()
 
        
 

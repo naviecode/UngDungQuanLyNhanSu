@@ -14,7 +14,7 @@ class Employee(BasePage):
         self.position_service = PositionService()
         self.employee_service = EmployeeService()
         self.set_permission()
-        self.on_show_frame()
+        # self.on_show_frame()
         
 
     def search(self):

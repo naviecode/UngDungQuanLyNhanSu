@@ -12,7 +12,7 @@ class Department(BasePage):
         self.controller = controller
         self.employee_service = EmployeeService()
         self.department_service = DepartMentService()
-        self.on_show_frame()
+        # self.on_show_frame()
 
 
     def search(self):
