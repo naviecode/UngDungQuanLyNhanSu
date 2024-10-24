@@ -12,7 +12,8 @@ class Department(BasePage):
         self.controller = controller
         self.employee_service = EmployeeService()
         self.department_service = DepartMentService()
-        # self.on_show_frame()
+        self.set_permission_button(btn_add_show=True, btn_export_show=False)
+
 
 
     def search(self):

@@ -11,7 +11,8 @@ class FormPopup(tk.Toplevel):
         self.geometry(f"{width}x{height}")
         self.title(title)
         self.parent = parent
-        
+        self.iconbitmap('./images/icons/form.ico')
+
         window_width = width
         window_height = height
         screen_width = parent.winfo_screenwidth()

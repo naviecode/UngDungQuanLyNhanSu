@@ -9,7 +9,7 @@ class Contract(BasePage):
         super().__init__(parent)
         self.employee_service = EmployeeService()
         self.contract_service = ContractService()
-        # self.on_show_frame()
+        self.set_permission_button(btn_add_show=True, btn_export_show=False)
 
 
     def search(self):
