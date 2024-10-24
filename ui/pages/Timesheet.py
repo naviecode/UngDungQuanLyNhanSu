@@ -13,7 +13,7 @@ class Timesheet(BasePage):
         super().__init__(parent)
         self.controller = controller
         self.timesheet_service = TimeSheetService()
-        self.set_permission_button(btn_add_show=True, btn_export_show=False)
+        self.set_permission_button(btn_add_show=False, btn_export_show=False)
 
 
     def export_excel(self):
