@@ -10,7 +10,6 @@ class LicenseService:
     def insert(self, input):
         self.db.connect_database()
         cursor = self.db.connection.cursor()
-        print(input)
         self.db.connection.cursor().execute(f'''
         INSERT INTO leave_requests (
             employee_id, 

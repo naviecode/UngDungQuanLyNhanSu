@@ -16,7 +16,9 @@ class ContractService:
             start_date, 
             end_date,
             salary,
-            benefits                            
+            benefits,
+            check_int_time,
+            check_out_time                            
         )
         VALUES 
         (
@@ -24,7 +26,9 @@ class ContractService:
             '{input["start_date"]}',
             '{input["end_date"]}',
             {input["salary"]},
-            N'{input["benefits"]}'
+            N'{input["benefits"]}',
+            '{input["check_in_time"]}',
+            '{input["check_out_time"]}'
         )
         ''')
 
@@ -57,7 +61,9 @@ class ContractService:
         self.db.connection.cursor().execute(f'''
         UPDATE contracts 
         SET salary = {data["salary"]}, 
-        benefits = N'{data["benefits"]}'
+        benefits = N'{data["benefits"]}',
+        check_in_time = '{data["check_in_time"]}',
+        check_out_time = '{data["check_out_time"]}'
         WHERE contract_id = {data["contract_id"]}
         ''')
         self.db.connection.commit()

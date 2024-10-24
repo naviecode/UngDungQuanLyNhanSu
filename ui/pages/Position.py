@@ -10,7 +10,7 @@ class Position(BasePage):
         super().__init__(parent)
         self.department_service = DepartMentService()
         self.position_service = PositionService()
-        self.on_show_frame()
+        # self.on_show_frame()
 
 
     def search(self):
@@ -38,7 +38,6 @@ class Position(BasePage):
     def update(self, data):
         confirm = messagebox.askyesno("Xác nhận cập nhập", "Bạn có chắc chắn muốn cập nhập ?")
         if confirm:
-            print(data)
             result = self.position_service.update(data)
             self.treeView.loadData()
             return True
@@ -47,7 +46,6 @@ class Position(BasePage):
     def delete(self, row_id):
         confirm = messagebox.askyesno("Xác nhận xóa", "Bạn có chắc chắn muốn xóa nhân viên này?")
         if confirm:
-            print(row_id)
             result = self.position_service.delete(row_id)
             self.treeView.loadData()
             return True

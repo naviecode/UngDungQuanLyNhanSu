@@ -13,6 +13,7 @@ import globals
 class Navbar(tk.Frame):
     def __init__(self, parent, frames):
         super().__init__(parent)
+
         self.attendance_service = AttendanceService()
         #Navigation
         navigation = tk.Frame(self, bg="white", width=250)
