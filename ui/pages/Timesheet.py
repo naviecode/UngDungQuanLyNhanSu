@@ -3,10 +3,10 @@ from tkinter import ttk
 from PIL import Image, ImageTk
 import calendar
 from datetime import datetime
-from service.timesheet_service import TimeSheetService
-from tkinter import Toplevel, Label
-import globals
+from tkinter import Toplevel, Label 
+from service import TimeSheetService
 from ui.pages import BasePage
+import globals
 
 class Timesheet(BasePage):
     def __init__(self, parent, controller):
