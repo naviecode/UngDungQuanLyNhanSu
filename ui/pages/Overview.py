@@ -17,7 +17,7 @@ class Overview(BasePage):
         self.controller = controller
         self.parent = parent
         self.overview_service = OverviewService()
-        self.set_permission(btn_add_show=False, btn_export_show=False)
+        self.set_permission_button(btn_add_show=False, btn_export_show=False)
 
     def create_pie_char(self, frame, hover_label, data = None, title = None, title_hover = None):
         data_names = []
@@ -151,7 +151,7 @@ class Overview(BasePage):
         self.frame_1.pack(padx=10, pady=10,fill="x")
         nowTime = datetime.now()
         formatted_time = nowTime.strftime("%A, %d %B %Y")
-        label = tk.Label(self.frame_1, text="Chào mừng trở lại, Quang Sơn", font=("Helvetica", 16))
+        label = tk.Label(self.frame_1, text=f"Chào mừng trở lại, {globals.current_user.username}", font=("Helvetica", 16))
         label.pack(anchor="w")
         
         label_2 = tk.Label(self.frame_1, text=f"Hôm này là {formatted_time}", font=("Helvetica", 11))
@@ -177,8 +177,6 @@ class Overview(BasePage):
 
         self.frame_3 = tk.Frame(self, height=200)
         self.frame_3.pack(padx=20, pady=0, fill="x", expand=True)
-
-        # self.create_bar_char_employee(self.frame_3, data=self.data_employee_departments)
 
         # User sẽ hiện biểu đồ này
         if globals.current_user.role_id == 2:

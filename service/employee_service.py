@@ -182,10 +182,13 @@ class EmployeeService:
         cursor = self.db.connection.cursor()
 
         cursor.execute(f'''
-        SELECT employee_id, A.name, A.email, A.start_date, B.position_name
+        SELECT A.employee_id, A.name, A.email, DATE_FORMAT(A.start_date, '%d/%m/%Y') AS start_date, B.position_name, C.department_name, F.role_name
         FROM employees A                      
         LEFT JOIN positions B on A.position_id = B.position_id
-        WHERE employee_id = {empId}
+        LEFT JOIN departments C on B.department_id = C.department_id
+        LEFT JOIN employee_roles D on A.employee_id = D.employee_id
+        LEFT JOIN roles F on D.role_id = F.role_id
+        WHERE A.employee_id = {empId}
         ''')
 
         columns_name = [desc[0] for desc in cursor.description]

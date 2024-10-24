@@ -10,7 +10,8 @@ class License(BasePage):
         super().__init__(parent)
         self.employee_service = EmployeeService()
         self.license_service = LicenseService()
-        # self.on_show_frame()
+        self.set_permission_button(btn_add_show=True, btn_export_show=False)
+
 
 
 
@@ -93,7 +94,7 @@ class License(BasePage):
             },
             {
                 'key': 'status',
-                'name': 'Ngày kết thúc',
+                'name': 'Trạng thái',
                 'width': 80,
                 'anchor': 'center'
             },
@@ -115,8 +116,6 @@ class License(BasePage):
 
                 {'name': 'start_date', 'type': 'CustomDate', 'label': 'Ngày bắt đầu', 'required': True, 'row': 1, 'col1' : 0, 'col2': 1},
                 {'name': 'end_date', 'type': 'CustomDate', 'label': 'Ngày kết thúc' , 'required': True, 'row': 1, 'col1' : 2, 'col2': 3},
-
-                # {'name': 'status', 'type': 'ComboboxCustom', 'label': 'Trạng thái' ,'values': self.status_license, 'row': 2, 'col1' : 0, 'col2': 1},
             ]
             
         else:
