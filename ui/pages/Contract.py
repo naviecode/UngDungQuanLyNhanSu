@@ -18,12 +18,12 @@ class Contract(BasePage):
     
     def add(self):
         self.title_popup = "Thêm mới"
-        form_popup = FormPopup(parent = self, title = self.title_popup,form_fields = self.fields,form_data = None, width=640, height=220)
+        form_popup = FormPopup(parent = self, title = self.title_popup,form_fields = self.fields,form_data = None, width=670, height=220)
     
     def edit(self, row_id):
         self.title_popup = "Cập nhập"
         data = self.contract_service.getById(row_id)
-        form_popup = FormPopup(parent = self, title = self.title_popup,form_fields = self.fields,form_data = data, width=640, height=220)
+        form_popup = FormPopup(parent = self, title = self.title_popup,form_fields = self.fields,form_data = data, width=670, height=220)
 
     def insert(self, data):
         confirm = messagebox.askyesno("Xác nhận thêm mới", "Bạn có chắc chắn muốn thêm mới ?")
@@ -105,8 +105,8 @@ class Contract(BasePage):
 
             {'name': 'benefits', 'type': 'CustomInput', 'label': 'Đặc quyền(nếu có)', 'required': True, 'row': 2, 'col1' : 0, 'col2': 1},
 
-            {'name': 'check_in_time', 'type': 'CustomInput', 'label': 'Giờ vào', 'required': True, 'row': 2, 'col1' : 2, 'col2': 3},
-            {'name': 'check_out_time', 'type': 'CustomInput', 'label': 'Giờ ra', 'required': True, 'row': 3, 'col1' : 0, 'col2': 1}
+            {'name': 'check_in_time', 'type': 'CustomInput', 'label': 'Giờ vào (HH:MM:SS)', 'required': True, 'row': 2, 'col1' : 2, 'col2': 3},
+            {'name': 'check_out_time', 'type': 'CustomInput', 'label': 'Giờ ra (HH:MM:SS)', 'required': True, 'row': 3, 'col1' : 0, 'col2': 1}
         ]
 
         self.fram_view = tk.Frame(self)
