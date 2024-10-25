@@ -3,7 +3,7 @@ from tkinter import messagebox
 from helper import CustomTreeView, FormPopup
 from ui.pages import BasePage
 from service import DepartMentService, EmployeeService
-
+from PIL import Image, ImageTk 
 
 
 class Department(BasePage):
@@ -13,7 +13,16 @@ class Department(BasePage):
         self.employee_service = EmployeeService()
         self.department_service = DepartMentService()
         self.set_permission_button(btn_add_show=True, btn_export_show=False)
+        # set background
+        self.set_background()
 
+    def set_background(self):
+        self.background_image = Image.open("./images/background/CloudBackground.png")
+        self.background_image = self.background_image.resize((self.winfo_screenwidth() - 250, self.winfo_screenheight() - 100), Image.Resampling.LANCZOS)
+        self.bg_image = ImageTk.PhotoImage(self.background_image)
+
+        self.bg_label = tk.Label(self, image=self.bg_image)
+        self.bg_label.place(relwidth=1, relheight=1) 
 
 
     def search(self):

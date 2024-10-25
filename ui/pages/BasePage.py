@@ -1,5 +1,7 @@
 import tkinter as tk
 import threading
+from helper import ButtonImage, LoadingPopup
+from PIL import Image, ImageTk 
 from helper import ButtonImage, LoadingPopup, CustomInputText, CustomInputDate
 
 class BasePage(tk.Frame):
@@ -37,6 +39,17 @@ class BasePage(tk.Frame):
 
         # set widget thuộc base
         self.nav_base._from_base = True
+
+        # set background
+        self.set_background()
+
+    def set_background(self):
+        self.background_image = Image.open("./images/background/CloudBackground.png")
+        self.background_image = self.background_image.resize((self.winfo_screenwidth() - 250, self.winfo_screenheight() - 100), Image.Resampling.LANCZOS)
+        self.bg_image = ImageTk.PhotoImage(self.background_image)
+
+        self.bg_label = tk.Label(self, image=self.bg_image)
+        self.bg_label.place(relwidth=1, relheight=1) 
         
     def add(self):
         print("Thêm mới")
