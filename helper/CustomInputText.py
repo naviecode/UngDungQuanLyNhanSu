@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 
 class CustomInputText:
-    def __init__(self, parent, text, width = None, show = None, required = False, type = "Text"):
+    def __init__(self, parent, text = None, width = None, show = None, required = False, type = "Text"):
         self.text = text
         self.entry_input = tk.Entry(parent, width=width, show=show)
         self.type = type
@@ -41,12 +41,6 @@ class CustomInputText:
     
     def delete_value(self):
         self.entry_input.delete(0, tk.END)
-    
-    # def grid(self, row, column, padx = 0, pady = 0):
-    #     self.entry_input.grid(row=row, column=column, padx=padx, pady=pady)
-
-    # def pack(self, padx=0, pady=0):
-    #     self.entry_input.pack(padx=padx, pady=pady)
 
     def grid(self, **kwargs):
         self.entry_input.grid(**kwargs)

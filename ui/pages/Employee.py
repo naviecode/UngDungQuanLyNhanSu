@@ -5,15 +5,14 @@ from service import EmployeeService, PositionService
 from helper import CustomTreeView, FormPopup
 
 
-
-
 class Employee(BasePage):
     def __init__(self, parent, controller):
         super().__init__(parent)
         self.controller = controller
+        self.parent = parent
         self.position_service = PositionService()
         self.employee_service = EmployeeService()
-        self.set_permission_button(btn_add_show=True, btn_export_show=False)
+        self.set_permission_button(btn_add_show=True, btn_export_show=False, btn_add_search=False)
 
         
 

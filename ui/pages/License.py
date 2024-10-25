@@ -106,7 +106,7 @@ class License(BasePage):
             }
         ]
         self.datas = self.license_service.search()
-        if globals.current_user.role_id == 2:
+        if globals.current_user.role_id != 1 and globals.current_user.role_id != 2:
             self.employee_data = self.employee_service.getCombox({'employee_id': globals.current_user.employee_id})
             self.fields = [
                 {'name': 'request_id', 'type': 'ID', 'label': 'ID' , 'required': False, 'row': 0, 'col1' : 1, 'col2': 2},
