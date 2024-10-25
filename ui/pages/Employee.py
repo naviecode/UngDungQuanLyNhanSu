@@ -5,17 +5,15 @@ from service import EmployeeService, PositionService
 from helper import CustomTreeView, FormPopup
 from PIL import Image, ImageTk 
 
-
-
 class Employee(BasePage):
     def __init__(self, parent, controller):
         super().__init__(parent)
         self.controller = controller
+        self.parent = parent
         self.position_service = PositionService()
         self.employee_service = EmployeeService()
-        self.set_permission_button(btn_add_show=True, btn_export_show=False)
-        # set background
         self.set_background()
+        self.set_permission_button(btn_add_show=True, btn_export_show=False, btn_add_search=False)
 
     def set_background(self):
         self.background_image = Image.open("./images/background/CloudBackground.png")

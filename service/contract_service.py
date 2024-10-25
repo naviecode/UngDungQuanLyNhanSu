@@ -17,7 +17,7 @@ class ContractService:
             end_date,
             salary,
             benefits,
-            check_int_time,
+            check_in_time,
             check_out_time                            
         )
         VALUES 

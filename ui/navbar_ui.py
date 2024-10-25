@@ -111,7 +111,7 @@ class Navbar(tk.Frame):
             self.button_contract.pack()
             self.button_employee_role.pack()
             self.button_role.pack()
-        elif globals.current_user.role_id == 3:
+        elif globals.current_user.role_id == 2:
             """MANAGER"""
             self.button_main.pack()
             self.button_dep.pack()

@@ -108,12 +108,12 @@ class Contract(BasePage):
             {'name': 'contract_id', 'type': 'ID', 'label': 'ID' , 'required': False, 'row': 0, 'col1' : 1, 'col2': 2},
 
             {'name': 'employee_id', 'type': 'ComboboxCustom', 'label': 'Nhân viên' , 'required': True,'values': self.data_employee, 'row': 0, 'col1' : 0, 'col2': 1},
-            {'name': 'salary', 'type': 'CustomInput', 'label': 'Mức lương', 'required': True, 'row': 0, 'col1' : 2, 'col2': 3},
+            {'name': 'salary', 'type': 'CustomInput', 'label': 'Mức lương', 'required': True, 'Type':'Number',  'row': 0, 'col1' : 2, 'col2': 3},
 
             {'name': 'start_date', 'type': 'CustomDate', 'label': 'Ngày bắt đầu' , 'required': True, 'row': 1, 'col1' : 0, 'col2': 1},
             {'name': 'end_date', 'type': 'CustomDate', 'label': 'Ngày kết thúc', 'required': True, 'row': 1, 'col1' : 2, 'col2': 3},
 
-            {'name': 'benefits', 'type': 'CustomInput', 'label': 'Đặc quyền(nếu có)', 'required': True, 'row': 2, 'col1' : 0, 'col2': 1},
+            {'name': 'benefits', 'type': 'CustomInput', 'label': 'Đặc quyền(nếu có)', 'required': False, 'row': 2, 'col1' : 0, 'col2': 1},
 
             {'name': 'check_in_time', 'type': 'CustomInput', 'label': 'Giờ vào (HH:MM:SS)', 'required': True, 'row': 2, 'col1' : 2, 'col2': 3},
             {'name': 'check_out_time', 'type': 'CustomInput', 'label': 'Giờ ra (HH:MM:SS)', 'required': True, 'row': 3, 'col1' : 0, 'col2': 1}

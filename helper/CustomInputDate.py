@@ -3,9 +3,9 @@ from tkinter import messagebox
 from tkcalendar import DateEntry
 
 class CustomInputDate:
-    def __init__(self, parent, text, width, selectMode, date_pattern , required = False):
+    def __init__(self, parent, width, text = None, selectMode='day', date_pattern='dd-mm-y' , required = False):
         self.text = text
-        self.date_entry = DateEntry(parent, width=width, selectmode='day', date_pattern='dd-mm-y')
+        self.date_entry = DateEntry(parent, width=width, selectmode=selectMode, date_pattern=date_pattern)
         self.novalidate = True
         if(required):
             self.novalidate = False
@@ -30,5 +30,9 @@ class CustomInputDate:
     def get_value(self):
         return self.date_entry.get_date()
     
-    def grid(self, row, column, padx=10, pady=10):
-        self.date_entry.grid(row=row, column=column, padx=padx, pady=pady)
+
+    def grid(self, **kwargs):
+        self.date_entry.grid(**kwargs)
+
+    def pack(self, **kwargs):
+        self.date_entry.pack(**kwargs)

@@ -86,7 +86,6 @@ class Timesheet(BasePage):
             "emp_id": globals.current_user.employee_id
         }
         rows = self.search(filterInput)
-        print(rows)
         self.update_calendar(int(month_index), year, rows)
         
         summary_data = self.lateNSoonSummarize(filterInput)
