@@ -1,4 +1,5 @@
 from datetime import datetime
+from tkinter import messagebox
 from data import InitData
 import configparser
 
@@ -26,7 +27,7 @@ class AttendanceService:
         if input.check_in:
             # Điều kiện cho check-in
             if current_time > checkin_end_time:
-                print("Không được check-in sau 9h30 sáng.")
+                messagebox.showinfo("Thông báo", "Không được check-in sau 9h30 sáng!")
                 return
             else:
                 # Thực hiện check-in
@@ -63,7 +64,7 @@ class AttendanceService:
             if result:
                 # Nếu đã có bản ghi check-in, chỉ cập nhật check-out
                 if current_time < checkout_start_time:
-                    print("Chưa đến giờ check-out.")
+                    messagebox.showinfo("Thông báo", "Chưa đến giờ check out!")
                     return
                 else:
                     update_query = f"""

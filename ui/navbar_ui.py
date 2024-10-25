@@ -15,32 +15,49 @@ class Navbar(tk.Frame):
         super().__init__(parent)
 
         self.attendance_service = AttendanceService()
-        #Navigation
-        navigation = tk.Frame(self, bg="white", width=250)
-        navigation.pack(side="left", fill="y")
-        navigation.pack_propagate(False)   
 
+       # Set the size of the navigation frame
+        nav_width = 250
+        nav_height = 600  # Adjust this based on your layout
+
+        # Load your background image and resize it to fit the navigation frame
+        navigation_bg_img = Image.open("./images/background/VintageSideBar.png")  # Path to your uploaded image
+        resized_nav_bg_img = navigation_bg_img.resize((nav_width, nav_height), Image.Resampling.LANCZOS)  # Corrected constant
+
+        self.navigation_bg_photo = ImageTk.PhotoImage(resized_nav_bg_img)
+
+        # Navigation Frame with resized background image
+        navigation = tk.Frame(self, width=nav_width, height=nav_height)
+        navigation.pack(side="left", fill="y")
+        navigation.pack_propagate(False)
+
+        # Set background image for the navigation frame
+        navigation_background_label = tk.Label(navigation, image=self.navigation_bg_photo)
+        navigation_background_label.place(x=0, y=0, relwidth=1, relheight=1)
+
+        # User Info Section
         nav_user = tk.Frame(navigation, bg="yellow", height=140)
         nav_user.pack(fill="x")
         nav_user.pack_propagate(False)   
-        nav_user_background_img = Image.open("./images/background/nav_user_background.jpg")
-        self.nav_user_background_photo = ImageTk.PhotoImage(nav_user_background_img)
+        nav_user_background_img = Image.open("./images/background/nav_user_background_2.jpg")
+        resized_nav_user_background_img = nav_user_background_img.resize((280,160), Image.Resampling.LANCZOS)
+        self.nav_user_background_photo = ImageTk.PhotoImage(resized_nav_user_background_img)
         nav_user_background_label = tk.Label(nav_user, image=self.nav_user_background_photo)
         nav_user_background_label.place(x=0, y=0, relwidth=1, relheight=1)
 
         nav_user_image = Image.open("./images/icons/fingerprint.png")
-        resized_nav_user_image = nav_user_image.resize((40,40))
+        resized_nav_user_image = nav_user_image.resize((40, 40))
         self.nav_user_image = ImageTk.PhotoImage(resized_nav_user_image)
         nav_user_image_button = tk.Button(nav_user, image=self.nav_user_image, bg="#0178bc", cursor="hand2", command=self.attendance, bd=0)
         nav_user_image_button.pack(pady=20)
 
-        label = tk.Label(nav_user, text= globals.current_user.username, font=("Arial", 16), bg="#0178bc", fg="white")
+        label = tk.Label(nav_user, text=globals.current_user.username, font=("Arial", 16), bg="#0178bc", fg="white")
         label.pack()
 
-        nav_main = tk.Frame(navigation, bg="white", height=420)
+        # Navigation buttons
+        nav_main = tk.Frame(navigation, height=420)  # No bg="transparent" here
         nav_main.pack(fill="x", padx=10, pady=10)
-        nav_main.pack_propagate(False)  
-
+        nav_main.pack_propagate(False)
         self.buttons = []
         self.frames = frames
         
@@ -142,14 +159,31 @@ class Navbar(tk.Frame):
     def attendance(self):
         response = messagebox.askyesno("Chấm công", "Bạn có muốn thực hiện chấm công?")
         if response:
-            data = AttendanceModel(
-                employee_id=globals.current_user.employee_id,
-                check_in = datetime.now(),
-                check_out = datetime.now(),
-                status = 'Present',
-                work_date = datetime.now().date(),
-                remarks = "No"
-            )
+            # Lấy thời gian hiện tại
+            now = datetime.now()
+            current_time = now.time()
+
+            # Định nghĩa các mốc thời gian
+            checkin_end_time = datetime.strptime('09:30', '%H:%M').time()
+            checkout_start_time = datetime.strptime('15:30', '%H:%M').time()
+
+            if current_time <= datetime.strptime('12:00', '%H:%M').time():
+                data = AttendanceModel(
+                    employee_id=globals.current_user.employee_id,
+                    check_in = datetime.now(),
+                    status = 'Present',
+                    work_date = datetime.now().date(),
+                    remarks = "No"
+                )
+            
+            if current_time > datetime.strptime('12:00', '%H:%M').time():
+                data = AttendanceModel(
+                    employee_id=globals.current_user.employee_id,
+                    check_out = datetime.now(),
+                    status = 'Present',
+                    work_date = datetime.now().date(),
+                    remarks = "No"
+                )
             self.attendance_service.handle(data)
             messagebox.showinfo("Thông báo", "Xin cảm ơn")
 

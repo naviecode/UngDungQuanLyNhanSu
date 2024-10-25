@@ -4,6 +4,7 @@ from ui.pages import BasePage
 from service import LicenseService, EmployeeService
 from helper import FormPopup, CustomTreeView
 import globals
+from PIL import Image, ImageTk 
 
 class License(BasePage):
     def __init__(self, parent, controller):
@@ -11,9 +12,16 @@ class License(BasePage):
         self.employee_service = EmployeeService()
         self.license_service = LicenseService()
         self.set_permission_button(btn_add_show=True, btn_export_show=False)
+        # set background
+        self.set_background()
 
+    def set_background(self):
+        self.background_image = Image.open("./images/background/CloudBackground.png")
+        self.background_image = self.background_image.resize((self.winfo_screenwidth() - 250, self.winfo_screenheight() - 100), Image.Resampling.LANCZOS)
+        self.bg_image = ImageTk.PhotoImage(self.background_image)
 
-
+        self.bg_label = tk.Label(self, image=self.bg_image)
+        self.bg_label.place(relwidth=1, relheight=1) 
 
     def search(self):
         self.filters_license = {'employee_id': globals.current_user.employee_id}
