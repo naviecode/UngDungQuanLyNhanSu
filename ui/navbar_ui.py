@@ -15,32 +15,38 @@ class Navbar(tk.Frame):
         super().__init__(parent)
 
         self.attendance_service = AttendanceService()
-        #Navigation
-        navigation = tk.Frame(self, bg="white", width=250)
-        navigation.pack(side="left", fill="y")
-        navigation.pack_propagate(False)   
 
+        nav_width = 250
+        nav_height = 600 
+
+        navigation = tk.Frame(self, width=nav_width, height=nav_height)
+        navigation.pack(side="left", fill="y")
+        navigation.pack_propagate(False)
+
+
+        # User Info Section
         nav_user = tk.Frame(navigation, bg="yellow", height=140)
         nav_user.pack(fill="x")
         nav_user.pack_propagate(False)   
-        nav_user_background_img = Image.open("./images/background/nav_user_background.jpg")
-        self.nav_user_background_photo = ImageTk.PhotoImage(nav_user_background_img)
+        nav_user_background_img = Image.open("./images/background/nav_user_background_2.jpg")
+        resized_nav_user_background_img = nav_user_background_img.resize((280,160), Image.Resampling.LANCZOS)
+        self.nav_user_background_photo = ImageTk.PhotoImage(resized_nav_user_background_img)
         nav_user_background_label = tk.Label(nav_user, image=self.nav_user_background_photo)
         nav_user_background_label.place(x=0, y=0, relwidth=1, relheight=1)
 
         nav_user_image = Image.open("./images/icons/fingerprint.png")
-        resized_nav_user_image = nav_user_image.resize((40,40))
+        resized_nav_user_image = nav_user_image.resize((40, 40))
         self.nav_user_image = ImageTk.PhotoImage(resized_nav_user_image)
         nav_user_image_button = tk.Button(nav_user, image=self.nav_user_image, bg="#0178bc", cursor="hand2", command=self.attendance, bd=0)
         nav_user_image_button.pack(pady=20)
 
-        label = tk.Label(nav_user, text= globals.current_user.username, font=("Arial", 16), bg="#0178bc", fg="white")
+        label = tk.Label(nav_user, text=globals.current_user.username, font=("Arial", 16), bg="#0178bc", fg="white")
         label.pack()
 
-        nav_main = tk.Frame(navigation, bg="white", height=420)
+        # Navigation buttons
+        nav_main = tk.Frame(navigation, height=420) 
         nav_main.pack(fill="x", padx=10, pady=10)
-        nav_main.pack_propagate(False)  
-
+        nav_main.pack_propagate(False)
         self.buttons = []
         self.frames = frames
         
@@ -94,7 +100,7 @@ class Navbar(tk.Frame):
             self.button_contract.pack()
             self.button_employee_role.pack()
             self.button_role.pack()
-        elif globals.current_user.role_id == 3:
+        elif globals.current_user.role_id == 2:
             """MANAGER"""
             self.button_main.pack()
             self.button_dep.pack()
@@ -142,15 +148,16 @@ class Navbar(tk.Frame):
     def attendance(self):
         response = messagebox.askyesno("Chấm công", "Bạn có muốn thực hiện chấm công?")
         if response:
+
             data = AttendanceModel(
                 employee_id=globals.current_user.employee_id,
                 check_in = datetime.now(),
-                check_out = datetime.now(),
                 status = 'Present',
                 work_date = datetime.now().date(),
-                remarks = "No"
+                remarks = "No",
+                check_out=datetime.now()
             )
+
             self.attendance_service.handle(data)
-            messagebox.showinfo("Thông báo", "Xin cảm ơn")
 
     
