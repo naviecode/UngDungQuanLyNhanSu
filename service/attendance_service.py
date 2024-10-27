@@ -24,34 +24,32 @@ class AttendanceService:
         checkout_start_time = datetime.strptime('15:30', '%H:%M').time()
 
         # Kiểm tra thời gian hiện tại có trong khoảng cho phép check-in hoặc check-out
-        if input.check_in:
-            # Điều kiện cho check-in
-            if current_time > checkin_end_time:
-                messagebox.showinfo("Thông báo", "Không được check-in sau 9h30 sáng!")
-                return
-            else:
-                # Thực hiện check-in
-                insert_query = f"""
-                INSERT INTO attendance (
-                    employee_id,
-                    check_in,
-                    work_date,
-                    status,
-                    remarks
-                )
-                VALUES 
-                (
-                    {input.employee_id},
-                    '{input.check_in}',
-                    '{input.work_date}',
-                    '{input.status}',
-                    '{input.remarks}'
-                )
-                """
-                cursor.execute(insert_query)
 
-        elif input.check_out:
-            # Kiểm tra xem có bản ghi check-in cho ngày hôm đó không
+        now = datetime.now()
+        current_time = now.time()
+
+        if current_time < checkin_end_time: 
+            # Thực hiện check-in
+            insert_query = f"""
+            INSERT INTO attendance (
+                employee_id,
+                check_in,
+                work_date,
+                status,
+                remarks
+            )
+            VALUES 
+            (
+                {input.employee_id},
+                '{input.check_in}',
+                '{input.work_date}',
+                '{input.status}',
+                '{input.remarks}'
+            )
+            """
+            cursor.execute(insert_query)
+            messagebox.showinfo("Thông báo", "Xin cảm ơn")
+        elif (current_time > checkout_start_time):
             query = f"""
             SELECT * 
             FROM attendance
@@ -62,11 +60,6 @@ class AttendanceService:
             result = cursor.fetchone()
 
             if result:
-                # Nếu đã có bản ghi check-in, chỉ cập nhật check-out
-                if current_time < checkout_start_time:
-                    messagebox.showinfo("Thông báo", "Chưa đến giờ check out!")
-                    return
-                else:
                     update_query = f"""
                     UPDATE attendance
                     SET check_out = '{input.check_out}'
@@ -74,6 +67,8 @@ class AttendanceService:
                     AND work_date = CURDATE()
                     """
                     cursor.execute(update_query)
+                    messagebox.showinfo("Thông báo", "Xin cảm ơn")
+
             else:
                 # Nếu không có bản ghi, thực hiện insert mới
                 insert_query = f"""
@@ -94,6 +89,10 @@ class AttendanceService:
                 )
                 """
                 cursor.execute(insert_query)
+                messagebox.showinfo("Thông báo", "Xin cảm ơn")
+        else: 
+            messagebox.showinfo("Thông báo", "Chưa đến giờ check-out!")
+       
 
         self.db.connection.commit()
         cursor.close()

@@ -17,10 +17,8 @@ class TimeSheetService:
             TIME_FORMAT(a.check_out, '%H:%i') AS check_out_time,
             CASE
                 WHEN lr.request_id IS NOT NULL 
-                    AND a.work_date BETWEEN DATE(lr.start_date) AND DATE(lr.end_date)
-                    AND lr.status = 'Approved'
-                    AND TIME(lr.start_date) <= '08:00:00' 
-                    AND TIME(lr.end_date) >= '12:00:00'
+                AND a.work_date BETWEEN lr.start_date AND lr.end_date
+                AND lr.status = 'Approved'
                     THEN 'ONLEAVE'
                 WHEN a.check_in IS NULL 
                     THEN 'UNPLEAVE'
@@ -31,12 +29,10 @@ class TimeSheetService:
             END AS check_in_status,
             CASE
                 WHEN lr.request_id IS NOT NULL 
-                    AND a.work_date BETWEEN DATE(lr.start_date) AND DATE(lr.end_date)
+                    AND a.work_date BETWEEN lr.start_date AND lr.end_date
                     AND lr.status = 'Approved'
-                    AND TIME(lr.start_date) <= '13:30:00' 
-                    AND TIME(lr.end_date) >= '17:30:00'
                     THEN 'ONLEAVE'
-                WHEN a.check_out IS NULL 
+                    WHEN a.check_out IS NULL 
                     THEN 'UNPLEAVE'
                 WHEN TIME(a.check_out) < '17:30:00' 
                     THEN 'SOON'
@@ -111,10 +107,8 @@ class TimeSheetService:
                 TIME_FORMAT(a.check_out, '%H:%i') AS check_out_time,
                 CASE
                     WHEN lr.request_id IS NOT NULL 
-                        AND a.work_date BETWEEN DATE(lr.start_date) AND DATE(lr.end_date)
-                        AND lr.status = 'Approved'
-                        AND TIME(lr.start_date) <= '08:00:00' 
-                        AND TIME(lr.end_date) >= '12:00:00'
+                    AND a.work_date BETWEEN lr.start_date AND lr.end_date
+                    AND lr.status = 'Approved'
                         THEN 'ONLEAVE'
                     WHEN a.check_in IS NULL 
                         THEN 'UNPLEAVE'
@@ -125,10 +119,8 @@ class TimeSheetService:
                 END AS check_in_status,
                 CASE
                     WHEN lr.request_id IS NOT NULL 
-                        AND a.work_date BETWEEN DATE(lr.start_date) AND DATE(lr.end_date)
-                        AND lr.status = 'Approved'
-                        AND TIME(lr.start_date) <= '13:30:00' 
-                        AND TIME(lr.end_date) >= '17:30:00'
+                    AND a.work_date BETWEEN lr.start_date AND lr.end_date
+                    AND lr.status = 'Approved'
                         THEN 'ONLEAVE'
                     WHEN a.check_out IS NULL 
                         THEN 'UNPLEAVE'
@@ -264,10 +256,8 @@ class TimeSheetService:
                     a.employee_id,      
                     CASE
                         WHEN lr.request_id IS NOT NULL 
-                            AND a.work_date BETWEEN DATE(lr.start_date) AND DATE(lr.end_date)
-                            AND lr.status = 'Approved'
-                            AND TIME(lr.start_date) <= '08:00:00' 
-                            AND TIME(lr.end_date) >= '12:00:00'
+                        AND a.work_date BETWEEN lr.start_date AND lr.end_date
+                        AND lr.status = 'Approved'
                             THEN 'ONLEAVE'
                         WHEN a.check_in IS NULL 
                             THEN 'UNPLEAVE'
@@ -278,10 +268,8 @@ class TimeSheetService:
                     END AS check_in_status,
                     CASE
                         WHEN lr.request_id IS NOT NULL 
-                            AND a.work_date BETWEEN DATE(lr.start_date) AND DATE(lr.end_date)
-                            AND lr.status = 'Approved'
-                            AND TIME(lr.start_date) <= '13:30:00' 
-                            AND TIME(lr.end_date) >= '17:30:00'
+                        AND a.work_date BETWEEN lr.start_date AND lr.end_date
+                        AND lr.status = 'Approved'
                             THEN 'ONLEAVE'
                         WHEN a.check_out IS NULL 
                             THEN 'UNPLEAVE'
@@ -313,4 +301,3 @@ class TimeSheetService:
         self.db.close_connection()
 
         return rows
-        

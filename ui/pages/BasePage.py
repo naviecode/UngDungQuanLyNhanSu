@@ -41,7 +41,7 @@ class BasePage(tk.Frame):
         self.nav_base._from_base = True
 
         # set background
-        self.set_background()
+        # self.set_background()
 
     def set_background(self):
         self.background_image = Image.open("./images/background/CloudBackground.png")

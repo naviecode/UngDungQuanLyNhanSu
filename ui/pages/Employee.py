@@ -12,8 +12,8 @@ class Employee(BasePage):
         self.parent = parent
         self.position_service = PositionService()
         self.employee_service = EmployeeService()
-        self.set_background()
         self.set_permission_button(btn_add_show=True, btn_export_show=False, btn_add_search=False)
+        # self.set_background()
 
     def set_background(self):
         self.background_image = Image.open("./images/background/CloudBackground.png")

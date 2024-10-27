@@ -13,7 +13,7 @@ class License(BasePage):
         self.license_service = LicenseService()
         self.set_permission_button(btn_add_show=True, btn_export_show=False)
         # set background
-        self.set_background()
+        # self.set_background()
 
     def set_background(self):
         self.background_image = Image.open("./images/background/CloudBackground.png")

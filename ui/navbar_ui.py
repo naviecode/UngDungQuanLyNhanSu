@@ -16,24 +16,13 @@ class Navbar(tk.Frame):
 
         self.attendance_service = AttendanceService()
 
-       # Set the size of the navigation frame
         nav_width = 250
-        nav_height = 600  # Adjust this based on your layout
+        nav_height = 600 
 
-        # Load your background image and resize it to fit the navigation frame
-        navigation_bg_img = Image.open("./images/background/VintageSideBar.png")  # Path to your uploaded image
-        resized_nav_bg_img = navigation_bg_img.resize((nav_width, nav_height), Image.Resampling.LANCZOS)  # Corrected constant
-
-        self.navigation_bg_photo = ImageTk.PhotoImage(resized_nav_bg_img)
-
-        # Navigation Frame with resized background image
         navigation = tk.Frame(self, width=nav_width, height=nav_height)
         navigation.pack(side="left", fill="y")
         navigation.pack_propagate(False)
 
-        # Set background image for the navigation frame
-        navigation_background_label = tk.Label(navigation, image=self.navigation_bg_photo)
-        navigation_background_label.place(x=0, y=0, relwidth=1, relheight=1)
 
         # User Info Section
         nav_user = tk.Frame(navigation, bg="yellow", height=140)
@@ -55,7 +44,7 @@ class Navbar(tk.Frame):
         label.pack()
 
         # Navigation buttons
-        nav_main = tk.Frame(navigation, height=420)  # No bg="transparent" here
+        nav_main = tk.Frame(navigation, height=420) 
         nav_main.pack(fill="x", padx=10, pady=10)
         nav_main.pack_propagate(False)
         self.buttons = []
@@ -159,32 +148,16 @@ class Navbar(tk.Frame):
     def attendance(self):
         response = messagebox.askyesno("Chấm công", "Bạn có muốn thực hiện chấm công?")
         if response:
-            # Lấy thời gian hiện tại
-            now = datetime.now()
-            current_time = now.time()
 
-            # Định nghĩa các mốc thời gian
-            checkin_end_time = datetime.strptime('09:30', '%H:%M').time()
-            checkout_start_time = datetime.strptime('15:30', '%H:%M').time()
+            data = AttendanceModel(
+                employee_id=globals.current_user.employee_id,
+                check_in = datetime.now(),
+                status = 'Present',
+                work_date = datetime.now().date(),
+                remarks = "No",
+                check_out=datetime.now()
+            )
 
-            if current_time <= datetime.strptime('12:00', '%H:%M').time():
-                data = AttendanceModel(
-                    employee_id=globals.current_user.employee_id,
-                    check_in = datetime.now(),
-                    status = 'Present',
-                    work_date = datetime.now().date(),
-                    remarks = "No"
-                )
-            
-            if current_time > datetime.strptime('12:00', '%H:%M').time():
-                data = AttendanceModel(
-                    employee_id=globals.current_user.employee_id,
-                    check_out = datetime.now(),
-                    status = 'Present',
-                    work_date = datetime.now().date(),
-                    remarks = "No"
-                )
             self.attendance_service.handle(data)
-            messagebox.showinfo("Thông báo", "Xin cảm ơn")
 
     
